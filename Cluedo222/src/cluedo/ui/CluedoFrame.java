@@ -17,13 +17,12 @@ public class CluedoFrame extends JFrame implements MouseListener{
 	private JMenuItem item;
 	public CluedoFrame(){
 		super("Cluedo");
-		canvas = new CluedoCanvas();
+		canvas = new CluedoCanvas(null);
 		setLayout(new BorderLayout());
 		add(canvas, BorderLayout.CENTER);// add canvas
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack(); // pack components tightly together
-		//setResizable(false);// prevent us from being resizeable
-		
+		setResizable(false);// prevent us from being resizeable
 		addMouseListener(this);
 		menuBar = new JMenuBar();
 		menu = new JMenu("Game");
