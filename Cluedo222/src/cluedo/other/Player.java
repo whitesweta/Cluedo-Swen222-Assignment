@@ -12,12 +12,10 @@ public class Player {
 	private int x;
 	private int y;
 
-	public Player(Character c,String n,int x,int y){
+	public Player(Character c,String n){
 		character = c;
 		cards = new HashSet<Card>();
 		name = n;
-		this.x = x;
-		this.y = y;
 		eliminated = false;
 	}
 }
