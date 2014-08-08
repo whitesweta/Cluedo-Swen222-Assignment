@@ -24,7 +24,6 @@ public class CluedoCanvas extends Canvas {
 	}
 
 	public void paint(Graphics g) {
-
 		for (int i = 0; i < board.getTiles().length; i++) {
 			for (int j = 0; j < board.getTiles()[i].length; j++) {
 				BoardTile tile = board.getTiles()[i][j];
@@ -55,4 +54,5 @@ public class CluedoCanvas extends Canvas {
 			throw new RuntimeException("Unable to load image: " + filename);
 		}
 	}
+
 }
