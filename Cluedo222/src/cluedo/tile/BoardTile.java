@@ -1,5 +1,7 @@
 package cluedo.tile;
 
-public interface BoardTile {
+import java.awt.Color;
 
+public interface BoardTile {
+	public Color getColour();
 }
