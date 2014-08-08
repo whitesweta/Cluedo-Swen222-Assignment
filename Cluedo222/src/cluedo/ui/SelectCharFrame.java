@@ -23,18 +23,21 @@ public class SelectCharFrame extends JFrame{
 	private List<String> characters = Arrays.asList("Miss Scarlet","Colonel Mustard","Mrs. White", "Reverend Green","Mrs.Peacock", "Professor Plum");
 	private ButtonGroup group;
 	private JTextField nameEntry;
+	private int numPlayer;
 	public SelectCharFrame(){
 		super("Select Character");
-		askForNumber();
+		askForNumber(); //loop for this many times
 		setLayout(new FlowLayout());
 		group = new ButtonGroup();
 		add(new JLabel("Choose a character:"));
+		JRadioButton button = null;
 		for(int i = 0; i < characters.size();i++){
-			JRadioButton button = new JRadioButton(characters.get(i));
+			button = new JRadioButton(characters.get(i));
 			button.setActionCommand(characters.get(i));
 			group.add(button);
 			add(button);
 		}
+		button.setSelected(true);
 		add(new JLabel("Please enter your name"));
 		nameEntry = new JTextField(15);
 		add(nameEntry);
@@ -44,20 +47,30 @@ public class SelectCharFrame extends JFrame{
 			public void actionPerformed(ActionEvent a) {
 				String chara = group.getSelection().getActionCommand();
 				String name = nameEntry.getText();
-				System.out.println(chara+name);
+				if(name.equals("")){
+					JOptionPane.showMessageDialog(null,"Please enter your name!");
+				}
+				else{
+					System.out.println(chara+name);
+					//make new player
+					nameEntry.setText("");
+					numPlayer--;
+					//if numPlayer == 0 stop this
+				}
+				
 				}});
 		add(done);
 		setVisible(true);
 	}
 	
-	private int askForNumber(){
+	private void askForNumber(){
 		Object[] options = {3,4,5,6};
-		Integer numPlayer = null;
-		while(numPlayer == null){
-		numPlayer = (Integer) JOptionPane.showInputDialog(null,"How many players?",
+		Integer num = null;
+		while(num == null){
+		num = (Integer) JOptionPane.showInputDialog(null,"How many players?",
 				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,options,"3");
 		}
-		return numPlayer;
+		numPlayer = num;
 	}
 	public static void main (String[] args){
 		new SelectCharFrame();
