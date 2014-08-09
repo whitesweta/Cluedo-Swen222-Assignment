@@ -18,4 +18,8 @@ public class Player {
 		name = n;
 		eliminated = false;
 	}
+	
+	public void addCard(Card c){
+		cards.add(c);
+	}
 }

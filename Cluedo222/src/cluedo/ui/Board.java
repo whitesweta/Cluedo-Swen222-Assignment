@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import cluedo.other.Card;
+import cluedo.other.Character;
 import cluedo.other.Player;
 import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
@@ -58,13 +60,27 @@ public class Board {
 		}		
 	}
 	
-	private void dealCards(){
-		List<Card> weapons = new ArrayList<Card>();
+	//assumes all the players have been created
+	private void dealCards(){ 
+		List<Card> weaponCards = new ArrayList<Card>();
+		List<Card> characterCards = new ArrayList<Card>();
+		List<Card> allCards = new ArrayList<Card>();
 		for(Weapon.WeaponType w : Weapon.WeaponType.values()){
 			Image image = loadImage(w.toString()+".png");
-			weapons.add(new Card(new Weapon(w),image));
+			weaponCards.add(new Card(new Weapon(w),image));
 		}
+		Collections.shuffle(weaponCards);
+		solution.add(weaponCards.remove(0));
+		
+		for(Character.Name c: Character.Name.values()){
+			
+		}
+		
 	}
+	
+	
+	
+	
 	private Image loadImage(String filename){
 		BufferedImage image = null;
 		try {
@@ -74,6 +90,7 @@ public class Board {
 		}
 		return image;
 	}
+	
 	private void createBoardFromFile() throws IOException {
 		String filename = "cluedo.txt";
 		FileReader fr = new FileReader(filename);
