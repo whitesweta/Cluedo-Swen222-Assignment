@@ -1,10 +1,10 @@
 package cluedo.other;
 
-public class Weapon extends Item {
-
-	public Weapon(String n) {
-		super(n);
-		// TODO Auto-generated constructor stub
+public class Weapon implements Item {
+	public enum WeaponType{CANDLESTICK,DAGGER,LEAD_PIPE,REVOLVER,ROPE,SPANNER};
+	private WeaponType weapon;
+	
+	public Weapon(WeaponType w){
+		weapon = w;
 	}
-
 }

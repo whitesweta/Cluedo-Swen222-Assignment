@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,26 +19,32 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.plaf.DimensionUIResource;
 
+import cluedo.other.Player;
+import cluedo.other.Character;
+
 @SuppressWarnings("serial")
 public class SelectCharFrame extends JFrame{
-	private List<String> characters = Arrays.asList("Miss Scarlet","Colonel Mustard","Mrs. White", "Reverend Green","Mrs.Peacock", "Professor Plum");
+	private List<JRadioButton> jrButtons = new ArrayList<JRadioButton>();
 	private ButtonGroup group;
 	private JTextField nameEntry;
+	private Board board;
 	private int numPlayer;
-	public SelectCharFrame(){
+	
+	public SelectCharFrame(Board b){
 		super("Select Character");
+		board = b;
 		askForNumber(); //loop for this many times
 		setLayout(new FlowLayout());
 		group = new ButtonGroup();
 		add(new JLabel("Choose a character:"));
-		JRadioButton button = null;
-		for(int i = 0; i < characters.size();i++){
-			button = new JRadioButton(characters.get(i));
-			button.setActionCommand(characters.get(i));
+		for(Character.Name chara : Character.Name.values()){
+			JRadioButton button = new JRadioButton(chara.toString());
+			jrButtons.add(button);
+			button.setActionCommand(chara.toString());
 			group.add(button);
 			add(button);
 		}
-		button.setSelected(true);
+		jrButtons.get(0).setSelected(true);		
 		add(new JLabel("Please enter your name"));
 		nameEntry = new JTextField(15);
 		add(nameEntry);
@@ -45,6 +52,7 @@ public class SelectCharFrame extends JFrame{
 		JButton done = new JButton("Done");
 		done.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent a) {
+				if(numPlayer == 0){return;}
 				String chara = group.getSelection().getActionCommand();
 				String name = nameEntry.getText();
 				if(name.equals("")){
@@ -52,15 +60,31 @@ public class SelectCharFrame extends JFrame{
 				}
 				else{
 					System.out.println(chara+name);
-					//make new player
+					board.addPlayer(new Player(new Character(Character.Name.valueOf(chara)),name));
+					removeFromOptions(chara);
 					nameEntry.setText("");
 					numPlayer--;
-					//if numPlayer == 0 stop this
+					if(numPlayer == 0){setVisible(false);}
 				}
 				
 				}});
 		add(done);
 		setVisible(true);
+	}
+	
+	private void removeFromOptions(String buttonName){
+		int i = 0;
+		for(; i<jrButtons.size();i++){
+			JRadioButton jrb = jrButtons.get(i);
+			if(buttonName.equals(jrb.getText())){
+				group.remove(jrb);
+				this.remove(jrb);
+				break;
+			}
+		}
+		jrButtons.remove(i);
+		jrButtons.get(0).setSelected(true);		
+		validate();
 	}
 	
 	private void askForNumber(){
@@ -72,9 +96,5 @@ public class SelectCharFrame extends JFrame{
 		}
 		numPlayer = num;
 	}
-	public static void main (String[] args){
-		new SelectCharFrame();
-	}
-	
 	
 }

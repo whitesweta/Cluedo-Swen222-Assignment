@@ -38,13 +38,15 @@ public class CluedoFrame extends JFrame implements MouseListener{
 		item = new JMenuItem(new AbstractAction("New Game") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				canvas = new CluedoCanvas(new Board());
-
+				Board b = new Board();
+				canvas = new CluedoCanvas(b);
+				new SelectCharFrame(b);
 			}
 		});
 		menu.add(item);
 		setSize(canvas.getSizeOfTile()*24,canvas.getSizeOfTile()*25+200);
 		setVisible(true); // make sure we are visible!
+		new SelectCharFrame(board);
 	}
 
 

@@ -1,11 +1,12 @@
 package cluedo.other;
 
 
-public class Room extends Item {
-
-	public Room(String n) {
-		super(n);
-		// TODO Auto-generated constructor stub
+public class Room implements Item {
+	public enum RoomType{KITCHEN,BALLROOM,CONSERVATORY,DINING_ROOM,LOUNGE,HALL,STUDY,LIBRARY,BILLIARD_ROOM};
+	private RoomType room;
+	
+	public Room(RoomType r){
+		room = r;
 	}
 
 }

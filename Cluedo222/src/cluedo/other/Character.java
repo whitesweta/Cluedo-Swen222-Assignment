@@ -1,10 +1,11 @@
 package cluedo.other;
 
-public class Character extends Item {
-
-	public Character(String n) {
-		super(n);
-		// TODO Auto-generated constructor stub
-	}
+public class Character implements Item {
+	public enum Name{MISS_SCARLET,COLONEL_MUSTARD,MRS_WHITE,REVEREND_GREEN,MRS_PEACOCK,PROFESSOR_PLUM };
+	private Name type;
+	
+	public Character(Name n){
+		type = n;
+	}	
 
 }
