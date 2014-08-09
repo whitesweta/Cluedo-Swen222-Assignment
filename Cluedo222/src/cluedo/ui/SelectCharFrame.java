@@ -2,11 +2,9 @@ package cluedo.ui;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -14,10 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.plaf.DimensionUIResource;
 
 import cluedo.other.Player;
 import cluedo.other.Character;
@@ -29,7 +25,7 @@ public class SelectCharFrame extends JFrame{
 	private JTextField nameEntry;
 	private Board board;
 	private int numPlayer;
-	
+
 	public SelectCharFrame(Board b){
 		super("Select Character");
 		board = b;
@@ -44,7 +40,7 @@ public class SelectCharFrame extends JFrame{
 			group.add(button);
 			add(button);
 		}
-		jrButtons.get(0).setSelected(true);		
+		jrButtons.get(0).setSelected(true);
 		add(new JLabel("Please enter your name"));
 		nameEntry = new JTextField(15);
 		add(nameEntry);
@@ -64,14 +60,17 @@ public class SelectCharFrame extends JFrame{
 					removeFromOptions(chara);
 					nameEntry.setText("");
 					numPlayer--;
-					if(numPlayer == 0){setVisible(false);}
+					if(numPlayer == 0){
+						setVisible(false);
+						board.readyToStart();
+					}
 				}
-				
+
 				}});
 		add(done);
 		setVisible(true);
 	}
-	
+
 	private void removeFromOptions(String buttonName){
 		int i = 0;
 		for(; i<jrButtons.size();i++){
@@ -83,10 +82,10 @@ public class SelectCharFrame extends JFrame{
 			}
 		}
 		jrButtons.remove(i);
-		jrButtons.get(0).setSelected(true);		
+		jrButtons.get(0).setSelected(true);
 		validate();
 	}
-	
+
 	private void askForNumber(){
 		Object[] options = {3,4,5,6};
 		Integer num = null;
@@ -96,5 +95,5 @@ public class SelectCharFrame extends JFrame{
 		}
 		numPlayer = num;
 	}
-	
+
 }

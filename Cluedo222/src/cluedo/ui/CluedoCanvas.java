@@ -4,9 +4,13 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import cluedo.other.Player;
+import cluedo.other.Position;
 import cluedo.tile.BoardTile;
 
 @SuppressWarnings("serial")
@@ -37,13 +41,19 @@ public class CluedoCanvas extends Canvas {
 			}
 
 		}
+
+		for(Player p: board.getPlayers()){
+			g.setColor(Color.black);
+			Position pos = p.getPosition();
+			g.fillOval(pos.getX()*sizeOfTile, pos.getY()*sizeOfTile, sizeOfTile, sizeOfTile);
+		}
 	}
+
 
 	public static Image loadImage(String filename) {
 		// using the URL means the image loads when stored
 		// in a jar or expanded into individual files.
-		java.net.URL imageURL = CluedoCanvas.class.getResource(IMAGE_PATH
-				+ filename);
+		java.net.URL imageURL = CluedoCanvas.class.getResource("images" + File.separator + filename);
 
 		try {
 			Image img = ImageIO.read(imageURL);

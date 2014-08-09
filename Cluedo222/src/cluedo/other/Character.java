@@ -8,4 +8,7 @@ public class Character implements Item {
 		type = n;
 	}	
 
+	public Name getType() {
+		return type;
+	}
 }
