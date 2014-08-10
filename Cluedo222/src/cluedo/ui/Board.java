@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,11 +23,14 @@ import javax.swing.JOptionPane;
 
 
 
+
+
 import cluedo.other.Card;
 import cluedo.other.Character;
 import cluedo.other.Player;
 import cluedo.other.Position;
 import cluedo.other.Room;
+import cluedo.other.Room.RoomType;
 import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
 import cluedo.tile.DoorTile;
@@ -39,7 +43,7 @@ public class Board {
 	private BoardTile[][] tiles;
 	private List<Player> players;
 	private Set<Card> solution;
-	private Set<Room> rooms;
+	private Map<String,Room> rooms;
 	private Set<Weapon> weapons;
 	private static final int ROW = 25;
 	private static final int COL = 24;
@@ -58,6 +62,8 @@ public class Board {
 
 	public Board() {
 		tiles = new BoardTile[ROW][COL];
+		setupRooms();
+		setupWeapons();
 		try {
 			createBoardFromFile();
 		} catch (IOException e) {
@@ -85,15 +91,32 @@ public class Board {
 		}
 	}
 	
-	public void setUpSets(){
-		
+	private void setupRooms(){
+		rooms = new HashMap<String,Room>();
+		rooms.put("K", new Room(RoomType.KITCHEN));
+		rooms.put("C", new Room(RoomType.CONSERVATORY));
+		rooms.put("B", new Room(RoomType.BALLROOM));
+		rooms.put("N", new Room(RoomType.DINING_ROOM));
+		rooms.put("R", new Room(RoomType.BILLIARD_ROOM));
+		rooms.put("L", new Room(RoomType.LIBRARY));
+		rooms.put("A", new Room(RoomType.HALL));
+		rooms.put("G", new Room(RoomType.LOUNGE));
+		rooms.put("T", new Room(RoomType.STUDY));
 	}
 	
-//	private void setupWeapon(){
-//		for (Wea)
-//	}
+	private void setupWeapons(){
+		weapons = new HashSet<Weapon>();
+		List<Room> room = new ArrayList<Room>(rooms.values());
+		int i=0;
+		for(Weapon.WeaponType w : Weapon.WeaponType.values()){
+			Weapon weapon = new Weapon(w);
+			room.get(i).setWeapon(weapon);
+			i++;
+		}
+	}
 
 	// assumes all the players have been created
+	//fix later to use the sets instead
 	private void dealCards() {
 		List<Card> weaponCards = new ArrayList<Card>();
 		List<Card> characterCards = new ArrayList<Card>();
@@ -120,8 +143,17 @@ public class Board {
 		Collections.shuffle(allCards);
 		dealToPlayers(allCards);
 	}
+	
+	
+	private void addToSolution(List<Card> cards) {
+		int i = new Random().nextInt(cards.size());
+		solution.add(cards.remove(i));
+		for(Room r: rooms.values()){
+			
+		}
+	}
 
-	private void dealToPlayers(List<Card> cards) {
+	private void dealToPlayers(Collection<Card> cards) {
 		int currentPlayer = 0;
 		for (Card c : cards) {
 			System.out.println(currentPlayer+" " + c.toString());
@@ -139,10 +171,7 @@ public class Board {
 		return next;
 	}
 
-	private void addToSolution(List<Card> cards) {
-		int i = new Random().nextInt(cards.size());
-		solution.add(cards.remove(i));
-	}
+	
 
 	private void createBoardFromFile() throws IOException {
 		String filename = "cluedo.txt";
@@ -173,8 +202,8 @@ public class Board {
 				// x is length of each line. will show 24
 				char c = line.charAt(x);
 				switch (c) {
-				case 'K':
-					tiles[y][x] = new RoomTile("Kitchen");
+				case 'D':
+					tiles[y][x] = new DoorTile();
 					break;
 				case 'S':
 					tiles[y][x] = new SecretTile();
@@ -185,38 +214,23 @@ public class Board {
 				case 'H':
 					tiles[y][x] = new HallwayTile();
 					break;
+				case 'K':
 				case 'C':
-					tiles[y][x] = new RoomTile("Conservatory");
-					break;
 				case 'B':
-					tiles[y][x] = new RoomTile("Ballroom");
-					break;
-				case 'D':
-					tiles[y][x] = new DoorTile();
-					break;
 				case 'N':
-					tiles[y][x] = new RoomTile("Dining Room");
-					break;
 				case 'R':
-					tiles[y][x] = new RoomTile("Billard Room");
-					break;
 				case 'L':
-					tiles[y][x] = new RoomTile("Library");
-					break;
 				case 'A':
-					tiles[y][x] = new RoomTile("Hall");
-					break;
 				case 'G':
-					tiles[y][x] = new RoomTile("Lounge");
-					break;
 				case 'T':
-					tiles[y][x] = new RoomTile("Study");
+					tiles[y][x] = new RoomTile(rooms.get(c));
 					break;
 				}
 			}
 		}
 
 	}
+	
 
 
 

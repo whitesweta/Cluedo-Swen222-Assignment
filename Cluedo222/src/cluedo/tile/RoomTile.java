@@ -2,11 +2,13 @@ package cluedo.tile;
 
 import java.awt.Color;
 
+import cluedo.other.Room;
+
 public class RoomTile implements BoardTile{
-	private String name;
+	private Room room;
 	
-	public RoomTile(String nm){
-		this.name = nm;
+	public RoomTile(Room r){
+		room = r;
 	}
 
 	@Override
