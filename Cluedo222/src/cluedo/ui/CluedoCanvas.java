@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import cluedo.other.Player;
 import cluedo.other.Position;
+import cluedo.other.Room;
 import cluedo.tile.BoardTile;
 
 @SuppressWarnings("serial")
@@ -41,7 +42,13 @@ public class CluedoCanvas extends Canvas {
 			}
 
 		}
-
+		g.setColor(Color.white);
+		for(Room r:board.getRooms()){
+			Position p = r.getFirstPosition();
+			System.out.println(r.getRoom());
+			System.out.println(p.getX()+" " + p.getY());
+			g.fillOval(p.getX()*sizeOfTile, p.getY()*sizeOfTile, sizeOfTile, sizeOfTile);
+		}
 		for(Player p: board.getPlayers()){
 			g.setColor(Color.black);
 			Position pos = p.getPosition();

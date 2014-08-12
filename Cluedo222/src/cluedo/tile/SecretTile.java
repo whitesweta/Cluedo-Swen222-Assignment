@@ -2,11 +2,18 @@ package cluedo.tile;
 
 import java.awt.Color;
 
-public class SecretTile implements BoardTile{
+import cluedo.other.Position;
+
+public class SecretTile extends BoardTile{
+
+	public SecretTile(Position p) {
+		super(p);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public Color getColour() {
 		return Color.MAGENTA;
 	}
-	
+
 }

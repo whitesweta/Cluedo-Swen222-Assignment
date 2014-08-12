@@ -52,8 +52,5 @@ public class Player {
 			position = new Position(23, 19);
 			break;
 		}
-
-
-
 	}
 }

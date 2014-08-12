@@ -2,12 +2,19 @@ package cluedo.tile;
 
 import java.awt.Color;
 
-public class EmptyTile implements BoardTile{
+import cluedo.other.Position;
+
+public class EmptyTile extends BoardTile{
+
+	public EmptyTile(Position p) {
+		super(p);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public Color getColour() {
 		return Color.BLACK;
-		
+
 	}
 
 }

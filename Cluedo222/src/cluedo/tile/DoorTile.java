@@ -2,12 +2,18 @@ package cluedo.tile;
 
 import java.awt.Color;
 
-public class DoorTile implements BoardTile{
+import cluedo.other.Position;
+
+public class DoorTile extends BoardTile{
+
+	public DoorTile(Position p) {
+		super(p);
+	}
 
 	@Override
 	public Color getColour() {
 		return Color.GRAY;
-		
+
 	}
 
 }
