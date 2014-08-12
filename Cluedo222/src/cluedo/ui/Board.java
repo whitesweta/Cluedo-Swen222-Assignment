@@ -19,19 +19,15 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-
-
-
-
-
-
 import cluedo.other.Card;
 import cluedo.other.Character;
+import cluedo.other.Character.Name;
 import cluedo.other.Player;
 import cluedo.other.Position;
 import cluedo.other.Room;
 import cluedo.other.Room.RoomType;
 import cluedo.other.Weapon;
+import cluedo.other.Weapon.WeaponType;
 import cluedo.tile.BoardTile;
 import cluedo.tile.DoorTile;
 import cluedo.tile.EmptyTile;
@@ -47,18 +43,20 @@ public class Board {
 	private Set<Weapon> weapons;
 	private static final int ROW = 25;
 	private static final int COL = 24;
-
+	
 	public static final int WAITING = 0;
 	public static final int READY = 1;
 	public static final int PLAYING = 2;
 	public static final int GAMEOVER = 3;
 	public static final int GAMEWON = 4;
+	
 
 	public List<Player> getPlayers() {
 		return players;
 	}
 
 	private int state; // this is used to tell us what state we're in.
+	private int currentPlayer = 0;
 
 	public Board() {
 		tiles = new BoardTile[ROW][COL];
@@ -90,7 +88,45 @@ public class Board {
 			dealCards();
 		}
 	}
+
+	public Collection<Room> getRooms(){
+		return rooms.values();
+	}
 	
+	public void makeSuggestion(){
+		Player p = players.get(currentPlayer);
+		Position pos = p.getPosition();
+		if(!(tiles[pos.getX()][pos.getY()] instanceof RoomTile)){
+			JOptionPane.showMessageDialog(null,
+				    "You cannot make a suggestion outside of a room",
+				    "Invalid move",
+				    JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		Room currentRoom = ((RoomTile)tiles[pos.getX()][pos.getY()]).getRoom();
+		Object[] weapon = Weapon.WeaponType.values();
+		Weapon.WeaponType chosenWeapon = (WeaponType) JOptionPane.showInputDialog(null,"Which weapon?",
+				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,weapon,weapon[0]);
+		Object[] character = Character.Name.values();
+		Character.Name chosenchar = (Name) JOptionPane.showInputDialog(null,"Which character?",
+				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,character,character[0]);
+		Card refuteCard = null;
+		for(int i = 0; i < players.size()-1;i++){
+			Player nextPlayer = players.get(nextPlayer(currentPlayer));
+			refuteCard = nextPlayer.refuteSuggestion(chosenWeapon,chosenchar);//need room too > <
+			if(refuteCard !=null){
+				break;
+			}
+		}		
+		String message = null;
+		if(refuteCard == null){
+			message = "The other players cannot refute your suggestion";
+		} else{
+			message = "A player has "+ refuteCard + " in their cards";
+		}
+		JOptionPane.showMessageDialog(null, message);
+	}
+
 	private void setupRooms(){
 		rooms = new HashMap<String,Room>();
 		rooms.put("K", new Room(RoomType.KITCHEN));
@@ -103,7 +139,7 @@ public class Board {
 		rooms.put("G", new Room(RoomType.LOUNGE));
 		rooms.put("T", new Room(RoomType.STUDY));
 	}
-	
+
 	private void setupWeapons(){
 		weapons = new HashSet<Weapon>();
 		List<Room> room = new ArrayList<Room>(rooms.values());
@@ -143,13 +179,13 @@ public class Board {
 		Collections.shuffle(allCards);
 		dealToPlayers(allCards);
 	}
-	
-	
+
+
 	private void addToSolution(List<Card> cards) {
 		int i = new Random().nextInt(cards.size());
 		solution.add(cards.remove(i));
 		for(Room r: rooms.values()){
-			
+
 		}
 	}
 
@@ -171,7 +207,6 @@ public class Board {
 		return next;
 	}
 
-	
 
 	private void createBoardFromFile() throws IOException {
 		String filename = "cluedo.txt";
@@ -196,23 +231,22 @@ public class Board {
 		}
 
 		for (int y = 0; y < lines.size(); y++) {
-			// y is the number of rows. does not start at zero so will show 25.
 			line = lines.get(y);
 			for (int x = 0; x < line.length(); x++) {
-				// x is length of each line. will show 24
 				char c = line.charAt(x);
+				Position p = new Position(x,y);
 				switch (c) {
 				case 'D':
-					tiles[y][x] = new DoorTile();
+					tiles[y][x] = new DoorTile(p);
 					break;
 				case 'S':
-					tiles[y][x] = new SecretTile();
+					tiles[y][x] = new SecretTile(p);
 					break;
 				case 'X':
-					tiles[y][x] = new EmptyTile();
+					tiles[y][x] = new EmptyTile(p);
 					break;
 				case 'H':
-					tiles[y][x] = new HallwayTile();
+					tiles[y][x] = new HallwayTile(p);
 					break;
 				case 'K':
 				case 'C':
@@ -223,14 +257,17 @@ public class Board {
 				case 'A':
 				case 'G':
 				case 'T':
-					tiles[y][x] = new RoomTile(rooms.get(c));
+					String s = String.valueOf(c);
+					RoomTile r = new RoomTile(p,rooms.get(s));
+					tiles[y][x] = r;
+					rooms.get(s).addTile(r);
 					break;
 				}
 			}
 		}
 
 	}
-	
+
 
 
 

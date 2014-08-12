@@ -29,6 +29,18 @@ public class Player {
 	public Position getPosition() {
 		return position;
 	}
+	
+	public Card refuteSuggestion(Weapon.WeaponType w, Character.Name c){
+		Card wCard = new Card(new Weapon(w),null);
+		if(cards.contains(wCard)){
+			return wCard;
+		}
+		Card cCard = new Card(new Character(c),null);
+		if(cards.contains(cCard)){
+			return cCard;
+		}		
+		return null;
+	}
 
 	private void setInitialPosition(){
 
@@ -52,8 +64,5 @@ public class Player {
 			position = new Position(23, 19);
 			break;
 		}
-
-
-
 	}
 }

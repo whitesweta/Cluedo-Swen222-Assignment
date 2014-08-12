@@ -91,7 +91,7 @@ public class SelectCharFrame extends JFrame{
 		Integer num = null;
 		while(num == null){
 		num = (Integer) JOptionPane.showInputDialog(null,"How many players?",
-				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,options,"3");
+				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
 		}
 		numPlayer = num;
 	}
