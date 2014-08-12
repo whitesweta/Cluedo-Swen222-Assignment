@@ -35,6 +35,14 @@ public class Card {
 			return false;
 		return true;
 	}
+	
+	public boolean isOfType(Type other){
+		return item.getType() == other;
+	}
+	
+	public Type cardType(){
+		return item.getType();
+	}
 
 	@Override
 	public String toString() {

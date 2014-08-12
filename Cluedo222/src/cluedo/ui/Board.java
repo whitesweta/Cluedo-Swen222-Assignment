@@ -21,11 +21,12 @@ import javax.swing.JOptionPane;
 
 import cluedo.other.Card;
 import cluedo.other.Character;
-import cluedo.other.Character.Name;
+import cluedo.other.Character.CharacterType;
 import cluedo.other.Player;
 import cluedo.other.Position;
 import cluedo.other.Room;
 import cluedo.other.Room.RoomType;
+import cluedo.other.Type;
 import cluedo.other.Weapon;
 import cluedo.other.Weapon.WeaponType;
 import cluedo.tile.BoardTile;
@@ -103,26 +104,26 @@ public class Board {
 				    JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		Room currentRoom = ((RoomTile)tiles[pos.getX()][pos.getY()]).getRoom();
+		Type currentRoom = ((RoomTile)tiles[pos.getX()][pos.getY()]).getRoom().getType();
 		Object[] weapon = Weapon.WeaponType.values();
 		Weapon.WeaponType chosenWeapon = (WeaponType) JOptionPane.showInputDialog(null,"Which weapon?",
 				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,weapon,weapon[0]);
-		Object[] character = Character.Name.values();
-		Character.Name chosenchar = (Name) JOptionPane.showInputDialog(null,"Which character?",
+		Object[] character = Character.CharacterType.values();
+		Character.CharacterType chosenChar = (CharacterType) JOptionPane.showInputDialog(null,"Which character?",
 				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,character,character[0]);
-		Card refuteCard = null;
+		Type refutedItem = null;
 		for(int i = 0; i < players.size()-1;i++){
 			Player nextPlayer = players.get(nextPlayer(currentPlayer));
-			refuteCard = nextPlayer.refuteSuggestion(chosenWeapon,chosenchar);//need room too > <
-			if(refuteCard !=null){
+			refutedItem = nextPlayer.refuteSuggestion(chosenWeapon,chosenChar,currentRoom);
+			if(refutedItem !=null){
 				break;
 			}
 		}		
 		String message = null;
-		if(refuteCard == null){
+		if(refutedItem == null){
 			message = "The other players cannot refute your suggestion";
 		} else{
-			message = "A player has "+ refuteCard + " in their cards";
+			message = "A player has "+ refutedItem + " in their cards";
 		}
 		JOptionPane.showMessageDialog(null, message);
 	}
@@ -163,7 +164,7 @@ public class Board {
 			weaponCards.add(new Card(new Weapon(w), image));
 		}
 		addToSolution(weaponCards);
-		for (Character.Name c : Character.Name.values()) {
+		for (Character.CharacterType c : Character.CharacterType.values()) {
 			Image image = CluedoCanvas.loadImage(c.toString() + ".jpg");
 			characterCards.add(new Card(new Character(c), image));
 		}

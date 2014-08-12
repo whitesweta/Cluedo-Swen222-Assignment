@@ -1,12 +1,15 @@
 package cluedo.other;
 
 public class Weapon implements Item {
-	
-	public enum WeaponType{CANDLESTICK,DAGGER,LEAD_PIPE,REVOLVER,ROPE,SPANNER};
+
+	public enum WeaponType implements Type {
+		CANDLESTICK, DAGGER, LEAD_PIPE, REVOLVER, ROPE, SPANNER
+	};
+
 	private WeaponType weapon;
 	private Room room;
 
-	public Weapon(WeaponType w){
+	public Weapon(WeaponType w) {
 		weapon = w;
 	}
 
@@ -17,7 +20,7 @@ public class Weapon implements Item {
 	public void setRoom(Room room) {
 		this.room = room;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -40,6 +43,9 @@ public class Weapon implements Item {
 		return true;
 	}
 
-
+	@Override
+	public Type getType(){
+		return weapon;
+	}
 
 }

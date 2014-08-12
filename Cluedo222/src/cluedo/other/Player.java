@@ -1,5 +1,7 @@
 package cluedo.other;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,21 +32,18 @@ public class Player {
 		return position;
 	}
 	
-	public Card refuteSuggestion(Weapon.WeaponType w, Character.Name c){
-		Card wCard = new Card(new Weapon(w),null);
-		if(cards.contains(wCard)){
-			return wCard;
+	public Type refuteSuggestion(Type weapon,Type charac,Type room){
+		for(Card c:cards){
+			if(c.isOfType(room)||c.isOfType(charac)||c.isOfType(weapon)){
+				return c.cardType();
+			}
 		}
-		Card cCard = new Card(new Character(c),null);
-		if(cards.contains(cCard)){
-			return cCard;
-		}		
 		return null;
 	}
 
 	private void setInitialPosition(){
 
-		switch(character.getType()){
+		switch((Character.CharacterType)character.getType()){
 		case MISS_SCARLET:
 			position = new Position(7,24);
 			break;
