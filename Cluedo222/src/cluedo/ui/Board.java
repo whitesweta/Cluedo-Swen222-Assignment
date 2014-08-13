@@ -187,7 +187,11 @@ public class Board {
 		return next;
 	}
 
-
+	private int diceRolled(){
+		int first = (int )(Math.random() * 6 + 1);
+		int second = (int )(Math.random() * 6 + 1);
+		return first + second;
+	}
 
 	private void createBoardFromFile() throws IOException {
 		String filename = "cluedo.txt";
