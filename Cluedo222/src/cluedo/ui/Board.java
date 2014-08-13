@@ -43,6 +43,7 @@ public class Board {
 	private Set<Weapon> weapons;
 	private static final int ROW = 25;
 	private static final int COL = 24;
+	private int numEliminated = 0; //number of players that have been eliminated
 	
 	private int state; // this is used to tell us what state we're in.
 	private int currentPlayer = 0;
@@ -93,7 +94,13 @@ public class Board {
 	}
 	
 	public void endTurn(){
-		currentPlayer = nextPlayer(currentPlayer);
+		while(true){
+			int next = nextPlayer(currentPlayer);
+			if(!(players.get(next).isEliminated())){
+				currentPlayer = next;
+				return;
+			}
+		}
 	}
 
 	public int diceRolled(){
@@ -133,7 +140,35 @@ public class Board {
 	}
 	
 	public void makeAccusation(){
-		
+		Player p = players.get(currentPlayer);
+		Set<Type> chosenItems = popupOptions(true);
+		boolean lost = false;
+		for(Card c : solution){
+			if(!(chosenItems.contains(c.cardType()))){
+				lost = true;
+				p.setEliminated(true);
+				break;
+			}
+		}
+		String message = "";
+		if(lost){
+			message = "You have made a wrong accusation. The solution is: ";
+			for(Card c : solution){
+				message += c.cardType()+" ";
+			}
+			if(++numEliminated == players.size()){
+				endGame(false);
+			}
+		}
+		else{
+			message = "You have solved the murder! You win";
+			endGame(true);
+		}
+		JOptionPane.showMessageDialog(null, message);
+	}
+	
+	private void endGame(boolean gameWon){
+		//if game lost, show the solution
 	}
 	
 	private Set<Type> popupOptions(boolean forAccusation){
