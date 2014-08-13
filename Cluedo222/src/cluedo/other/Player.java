@@ -32,6 +32,16 @@ public class Player {
 	public Position getPosition() {
 		return position;
 	}
+	
+	
+
+	public boolean isEliminated() {
+		return eliminated;
+	}
+
+	public void setEliminated(boolean eliminated) {
+		this.eliminated = eliminated;
+	}
 
 	private void setInitialPosition(){
 
@@ -57,9 +67,9 @@ public class Player {
 		}
 	}
 
-	public Type refuteSuggestion(Type weapon,Type charac,Type room){
+	public Type refuteSuggestion(Set<Type> chosenTypes){
 		for(Card c:cards){
-			if(c.cardType() == weapon||c.cardType() == charac||c.cardType() == room){
+			if(chosenTypes.contains(c.cardType())){
 				return c.cardType();
 			}
 		}

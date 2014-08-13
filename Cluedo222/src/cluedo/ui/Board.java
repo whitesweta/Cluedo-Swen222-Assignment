@@ -87,12 +87,19 @@ public class Board {
 	public Collection<Room> getRooms(){
 		return rooms.values();
 	}
+	
 	public List<Player> getPlayers() {
 		return players;
 	}
 	
 	public void endTurn(){
 		currentPlayer = nextPlayer(currentPlayer);
+	}
+
+	public int diceRolled(){
+		int first = (int )(Math.random() * 6 + 1);
+		int second = (int )(Math.random() * 6 + 1);
+		return first + second;
 	}
 	
 	public void makeSuggestion(){
@@ -106,15 +113,12 @@ public class Board {
 			return;
 		}
 		Type currentRoom = ((RoomTile)tiles[pos.getX()][pos.getY()]).getRoom().getType();
-		Object[] weapon = Weapon.WeaponType.values();
-		Weapon.WeaponType chosenWeapon = (Weapon.WeaponType) JOptionPane.showInputDialog(null,"Which weapon?", "Number of Players",JOptionPane.PLAIN_MESSAGE,null,weapon,weapon[0]);
-		Object[] character = Character.CharaType.values();
-		CharaType chosenChar = (CharaType) JOptionPane.showInputDialog(null,"Which character?",
-				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,character,character[0]);
+		Set<Type> chosenItems = popupOptions(false);
+		chosenItems.add(currentRoom);
 		Type refutedItem = null;
 		for(int i = 0; i < players.size()-1;i++){
 			Player nextPlayer = players.get(nextPlayer(currentPlayer));
-			refutedItem = nextPlayer.refuteSuggestion(chosenWeapon,chosenChar,currentRoom);
+			refutedItem = nextPlayer.refuteSuggestion(chosenItems);
 			if(refutedItem !=null){
 				break;
 			}
@@ -126,6 +130,29 @@ public class Board {
 			message = "A player has "+ refutedItem + " in their cards";
 		}
 		JOptionPane.showMessageDialog(null, message);
+	}
+	
+	public void makeAccusation(){
+		
+	}
+	
+	private Set<Type> popupOptions(boolean forAccusation){
+		Set<Type> chosenItems = new HashSet<Type>();
+		String label = "Make Suggestion";
+		if(forAccusation){
+			label = "Make Accusation";
+			Object[] roomOptions = Weapon.WeaponType.values();
+			Type room = (Type) JOptionPane.showInputDialog(null,"Which room?", label,JOptionPane.PLAIN_MESSAGE,null,roomOptions,roomOptions[0]);
+			chosenItems.add(room);
+		}
+		Object[] weaponOptions = Weapon.WeaponType.values();
+		Type weapon = (Type) JOptionPane.showInputDialog(null,"Which weapon?", label ,JOptionPane.PLAIN_MESSAGE,null,weaponOptions,weaponOptions[0]);
+		chosenItems.add(weapon);
+		Object[] characterOptions = Character.CharaType.values();
+		Type character = (Type) JOptionPane.showInputDialog(null,"Which character?",
+				label,JOptionPane.PLAIN_MESSAGE,null,characterOptions,characterOptions[0]);
+		chosenItems.add(character);
+		return chosenItems;
 	}
 
 	private void setupRooms(){
@@ -208,11 +235,6 @@ public class Board {
 		return next;
 	}
 
-	public int diceRolled(){
-		int first = (int )(Math.random() * 6 + 1);
-		int second = (int )(Math.random() * 6 + 1);
-		return first + second;
-	}
 
 	private void createBoardFromFile() throws IOException {
 		String filename = "cluedo.txt";
