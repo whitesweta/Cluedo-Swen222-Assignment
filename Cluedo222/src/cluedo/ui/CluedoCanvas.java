@@ -23,7 +23,8 @@ public class CluedoCanvas extends Canvas {
 	public CluedoCanvas(Board board) {
 		this.board = board;
 	}
-
+	
+	
 	public int getSizeOfTile() {
 		return sizeOfTile;
 	}
@@ -71,5 +72,7 @@ public class CluedoCanvas extends Canvas {
 			throw new RuntimeException("Unable to load image: " + filename);
 		}
 	}
+	
+	
 
 }

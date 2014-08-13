@@ -14,6 +14,10 @@ public class Card {
 	public Type cardType(){
 		return item.getType();
 	}
+	
+	public Image getImage(){
+		return cardImage;
+	}
 
 	@Override
 	public String toString() {

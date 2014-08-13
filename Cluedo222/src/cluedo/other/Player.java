@@ -66,6 +66,10 @@ public class Player {
 			break;
 		}
 	}
+	
+	public Set<Card> getCards(){
+		return cards;
+	}
 
 	public Type refuteSuggestion(Set<Type> chosenTypes){
 		for(Card c:cards){

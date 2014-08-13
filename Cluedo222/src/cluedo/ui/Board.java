@@ -1,9 +1,7 @@
 package cluedo.ui;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,12 +14,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import cluedo.other.Card;
 import cluedo.other.Character;
-import cluedo.other.Character.CharaType;
 import cluedo.other.Player;
 import cluedo.other.Position;
 import cluedo.other.Room;
@@ -44,8 +40,9 @@ public class Board {
 	private static final int ROW = 25;
 	private static final int COL = 24;
 	private int numEliminated = 0; //number of players that have been eliminated
+	private int toMove = 0;;
 	
-	private int state; // this is used to tell us what state we're in.
+	int state; // this is used to tell us what state we're in. 
 	private int currentPlayer = 0;
 	
 	public static final int WAITING = 0;
@@ -53,7 +50,8 @@ public class Board {
 	public static final int PLAYING = 2;
 	public static final int GAMEOVER = 3;
 	public static final int GAMEWON = 4;
-
+	
+	//Constructor. sets up board with all the tiles from files. creates player and solution collections
 	public Board() {
 		tiles = new BoardTile[ROW][COL];
 		setupRooms();
@@ -67,34 +65,33 @@ public class Board {
 		solution = new HashSet<Card>();
 		state = WAITING;
 	}
-
-	public BoardTile[][] getTiles() {
-		return tiles;
-	}
-
-	public void addPlayer(Player p) {
-		if (state == WAITING) {
-			players.add(p);
-		}
-	}
+	
+	//state changing methods
 
 	public void readyToStart() {
 		if (state == WAITING) {
 			state = READY;
 			dealCards();
 		}
+		startGame();
 	}
 
-	public Collection<Room> getRooms(){
-		return rooms.values();
+	public void startGame(){
+		if (state == READY) {
+			state = PLAYING;
+		}
+		
 	}
 	
-	public List<Player> getPlayers() {
-		return players;
+	//in game methods
+	
+	public void move (int player){
+
 	}
 	
 	public void endTurn(){
 		while(true){
+			toMove=0;
 			int next = nextPlayer(currentPlayer);
 			if(!(players.get(next).isEliminated())){
 				currentPlayer = next;
@@ -103,10 +100,11 @@ public class Board {
 		}
 	}
 
-	public int diceRolled(){
+	public void diceRolled(){
 		int first = (int )(Math.random() * 6 + 1);
 		int second = (int )(Math.random() * 6 + 1);
-		return first + second;
+		toMove = first + second;
+		move(currentPlayer);
 	}
 	
 	public void makeSuggestion(){
@@ -190,29 +188,7 @@ public class Board {
 		return chosenItems;
 	}
 
-	private void setupRooms(){
-		rooms = new HashMap<String,Room>();
-		rooms.put("K", new Room(RoomType.KITCHEN));
-		rooms.put("C", new Room(RoomType.CONSERVATORY));
-		rooms.put("B", new Room(RoomType.BALLROOM));
-		rooms.put("N", new Room(RoomType.DINING_ROOM));
-		rooms.put("R", new Room(RoomType.BILLIARD_ROOM));
-		rooms.put("L", new Room(RoomType.LIBRARY));
-		rooms.put("A", new Room(RoomType.HALL));
-		rooms.put("G", new Room(RoomType.LOUNGE));
-		rooms.put("T", new Room(RoomType.STUDY));
-	}
-
-	private void setupWeapons(){
-		weapons = new HashSet<Weapon>();
-		List<Room> room = new ArrayList<Room>(rooms.values());
-		int i=0;
-		for(Weapon.WeaponType w : Weapon.WeaponType.values()){
-			Weapon weapon = new Weapon(w);
-			room.get(i).setWeapon(weapon);
-			i++;
-		}
-	}
+	
 
 	// assumes all the players have been created
 	//fix later to use the sets instead
@@ -244,22 +220,6 @@ public class Board {
 	}
 
 
-	private void addToSolution(List<Card> cards) {
-		int i = new Random().nextInt(cards.size());
-		solution.add(cards.remove(i));	
-	}
-
-	private void dealToPlayers(Collection<Card> cards) {
-		for(Card c:solution){System.out.println(c.toString());}
-		int currentPlayer = 0;
-		for (Card c : cards) {
-			System.out.println(currentPlayer+" " + c.toString());
-			players.get(currentPlayer).addCard(c);
-			currentPlayer = nextPlayer(currentPlayer);
-		}
-
-	}
-
 	private int nextPlayer(int currentPlayer) {
 		int next = currentPlayer + 1;
 		if (next == players.size()) {
@@ -267,7 +227,12 @@ public class Board {
 		}
 		return next;
 	}
-
+	
+	
+	
+	
+	
+	//setup methods
 
 	private void createBoardFromFile() throws IOException {
 		String filename = "cluedo.txt";
@@ -278,8 +243,7 @@ public class Board {
 		String line;
 		while ((line = br.readLine()) != null) {
 			lines.add(line);
-			// System.out.println(line);
-
+			
 			// now sanity check
 
 			if (width == -1) {
@@ -328,8 +292,73 @@ public class Board {
 		}
 
 	}
+	
+	private void setupRooms(){
+		rooms = new HashMap<String,Room>();
+		rooms.put("K", new Room(RoomType.KITCHEN));
+		rooms.put("C", new Room(RoomType.CONSERVATORY));
+		rooms.put("B", new Room(RoomType.BALLROOM));
+		rooms.put("N", new Room(RoomType.DINING_ROOM));
+		rooms.put("R", new Room(RoomType.BILLIARD_ROOM));
+		rooms.put("L", new Room(RoomType.LIBRARY));
+		rooms.put("A", new Room(RoomType.HALL));
+		rooms.put("G", new Room(RoomType.LOUNGE));
+		rooms.put("T", new Room(RoomType.STUDY));
+	}
 
+	private void setupWeapons(){
+		weapons = new HashSet<Weapon>();
+		List<Room> room = new ArrayList<Room>(rooms.values());
+		int i=0;
+		for(Weapon.WeaponType w : Weapon.WeaponType.values()){
+			Weapon weapon = new Weapon(w);
+			room.get(i).setWeapon(weapon);
+			i++;
+		}
+	}
+	
+	private void addToSolution(List<Card> cards) {
+		int i = new Random().nextInt(cards.size());
+		solution.add(cards.remove(i));	
+	}
 
+	private void dealToPlayers(Collection<Card> cards) {
+		
+		int currentPlayer = 0;
+		for (Card c : cards) {
+			;
+			players.get(currentPlayer).addCard(c);
+			currentPlayer = nextPlayer(currentPlayer);
+		}
 
+	}
+	
+	
+	
 
+	//getters and setters
+
+		public BoardTile[][] getTiles() {
+			return tiles;
+		}
+
+		public Collection<Room> getRooms(){
+			return rooms.values();
+		}
+		
+		public List<Player> getPlayers() {
+			return players;
+		}
+		
+		public Player getCurrentPlayer(){
+			if(state!=WAITING){
+			return players.get(currentPlayer);
+			}
+			else return null;
+		}
+
+		public int getState() {
+			return state;
+		}
+		
 }

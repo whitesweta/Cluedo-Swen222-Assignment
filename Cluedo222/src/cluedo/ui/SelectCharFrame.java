@@ -56,13 +56,14 @@ public class SelectCharFrame extends JFrame{
 				}
 				else{
 					System.out.println(chara+name);
-					board.addPlayer(new Player(new Character(Character.CharaType.valueOf(chara)),name));
+					addPlayer(new Player(new Character(Character.CharaType.valueOf(chara)),name));
 					removeFromOptions(chara);
 					nameEntry.setText("");
 					numPlayer--;
 					if(numPlayer == 0){
 						setVisible(false);
 						board.readyToStart();
+						
 					}
 				}
 
@@ -94,6 +95,14 @@ public class SelectCharFrame extends JFrame{
 				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,options,"3");
 		}
 		numPlayer = num;
+	}
+	
+	
+	//moved this from board. hoepfully doesnt break :/
+	public void addPlayer(Player p) {
+		if (board.getState() == Board.WAITING) {
+			board.getPlayers().add(p);
+		}
 	}
 
 }

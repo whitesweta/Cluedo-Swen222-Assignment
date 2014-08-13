@@ -11,7 +11,8 @@ import cluedo.ui.CluedoFrame;
 public class Main {
 
 	public static void main(String[] args) {
-		new CluedoFrame(new Board());
+		Board board = new Board();
+		CluedoFrame frame = new CluedoFrame(board);
 	}
 
 }
