@@ -21,10 +21,12 @@ import javax.swing.JOptionPane;
 
 import cluedo.other.Card;
 import cluedo.other.Character;
+import cluedo.other.Character.CharaType;
 import cluedo.other.Player;
 import cluedo.other.Position;
 import cluedo.other.Room;
 import cluedo.other.Room.RoomType;
+import cluedo.other.Type;
 import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
 import cluedo.tile.DoorTile;
@@ -41,6 +43,7 @@ public class Board {
 	private Set<Weapon> weapons;
 	private static final int ROW = 25;
 	private static final int COL = 24;
+	
 	
 	
 	public static final int WAITING = 0;
@@ -102,9 +105,27 @@ public class Board {
 				    JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		Type currentRoom = ((RoomTile)tiles[pos.getX()][pos.getY()]).getRoom().getType();
 		Object[] weapon = Weapon.WeaponType.values();
-		Object[] character = Character.Name.values();
-		
+		Weapon.WeaponType chosenWeapon = (Weapon.WeaponType) JOptionPane.showInputDialog(null,"Which weapon?", "Number of Players",JOptionPane.PLAIN_MESSAGE,null,weapon,weapon[0]);
+		Object[] character = Character.CharaType.values();
+		CharaType chosenChar = (CharaType) JOptionPane.showInputDialog(null,"Which character?",
+				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,character,character[0]);
+		Type refutedItem = null;
+		for(int i = 0; i < players.size()-1;i++){
+			Player nextPlayer = players.get(nextPlayer(currentPlayer));
+			refutedItem = nextPlayer.refuteSuggestion(chosenWeapon,chosenChar,currentRoom);
+			if(refutedItem !=null){
+				break;
+			}
+		}		
+		String message = null;
+		if(refutedItem == null){
+			message = "The other players cannot refute your suggestion";
+		} else{
+			message = "A player has "+ refutedItem + " in their cards";
+		}
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 	private void setupRooms(){
@@ -143,7 +164,7 @@ public class Board {
 			weaponCards.add(new Card(new Weapon(w), image));
 		}
 		addToSolution(weaponCards);
-		for (Character.Name c : Character.Name.values()) {
+		for (Character.CharaType c : Character.CharaType.values()) {
 			Image image = CluedoCanvas.loadImage(c.toString() + ".jpg");
 			characterCards.add(new Card(new Character(c), image));
 		}

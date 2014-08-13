@@ -3,6 +3,9 @@ package cluedo.other;
 import java.util.HashSet;
 import java.util.Set;
 
+import cluedo.other.Character.CharaType;
+import cluedo.other.Weapon.WeaponType;
+
 public class Player {
 	private Character character;
 	private Set<Card> cards;
@@ -52,5 +55,14 @@ public class Player {
 			position = new Position(23, 19);
 			break;
 		}
+	}
+
+	public Type refuteSuggestion(Type weapon,Type charac,Type room){
+		for(Card c:cards){
+			if(c.cardType() == weapon||c.cardType() == charac||c.cardType() == room){
+				return c.cardType();
+			}
+		}
+		return null;
 	}
 }

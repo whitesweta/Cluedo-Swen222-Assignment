@@ -7,7 +7,7 @@ import cluedo.tile.RoomTile;
 
 
 public class Room implements Item {
-	public enum RoomType{KITCHEN,BALLROOM,CONSERVATORY,DINING_ROOM,LOUNGE,HALL,STUDY,LIBRARY,BILLIARD_ROOM};
+	public enum RoomType implements Type{KITCHEN,BALLROOM,CONSERVATORY,DINING_ROOM,LOUNGE,HALL,STUDY,LIBRARY,BILLIARD_ROOM};
 	private RoomType room;
 	private Weapon weapon;
 	private List<RoomTile> roomtiles = new ArrayList<RoomTile>();
@@ -28,7 +28,7 @@ public class Room implements Item {
 		return roomtiles.get(0).getPosition();
 	}
 
-	public RoomType getRoom() {
+	public Type getType() {
 		return room;
 	}
 }

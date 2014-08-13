@@ -10,6 +10,10 @@ public class Card {
 		cardImage = im;
 		item = i;
 	}
+	
+	public Type cardType(){
+		return item.getType();
+	}
 
 	@Override
 	public String toString() {

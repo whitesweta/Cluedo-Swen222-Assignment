@@ -45,7 +45,7 @@ public class CluedoCanvas extends Canvas {
 		g.setColor(Color.white);
 		for(Room r:board.getRooms()){
 			Position p = r.getFirstPosition();
-			System.out.println(r.getRoom());
+			System.out.println(r.getType());
 			System.out.println(p.getX()+" " + p.getY());
 			g.fillOval(p.getX()*sizeOfTile, p.getY()*sizeOfTile, sizeOfTile, sizeOfTile);
 		}

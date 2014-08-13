@@ -33,7 +33,7 @@ public class SelectCharFrame extends JFrame{
 		setLayout(new FlowLayout());
 		group = new ButtonGroup();
 		add(new JLabel("Choose a character:"));
-		for(Character.Name chara : Character.Name.values()){
+		for(Character.CharaType chara : Character.CharaType.values()){
 			JRadioButton button = new JRadioButton(chara.toString());
 			jrButtons.add(button);
 			button.setActionCommand(chara.toString());
@@ -56,7 +56,7 @@ public class SelectCharFrame extends JFrame{
 				}
 				else{
 					System.out.println(chara+name);
-					board.addPlayer(new Player(new Character(Character.Name.valueOf(chara)),name));
+					board.addPlayer(new Player(new Character(Character.CharaType.valueOf(chara)),name));
 					removeFromOptions(chara);
 					nameEntry.setText("");
 					numPlayer--;
