@@ -44,21 +44,14 @@ public class Board {
 	private static final int ROW = 25;
 	private static final int COL = 24;
 	
-	
+	private int state; // this is used to tell us what state we're in.
+	private int currentPlayer = 0;
 	
 	public static final int WAITING = 0;
 	public static final int READY = 1;
 	public static final int PLAYING = 2;
 	public static final int GAMEOVER = 3;
 	public static final int GAMEWON = 4;
-	
-
-	public List<Player> getPlayers() {
-		return players;
-	}
-
-	private int state; // this is used to tell us what state we're in.
-	private int currentPlayer = 0;
 
 	public Board() {
 		tiles = new BoardTile[ROW][COL];
@@ -93,6 +86,13 @@ public class Board {
 
 	public Collection<Room> getRooms(){
 		return rooms.values();
+	}
+	public List<Player> getPlayers() {
+		return players;
+	}
+	
+	public void endTurn(){
+		currentPlayer = nextPlayer(currentPlayer);
 	}
 	
 	public void makeSuggestion(){
@@ -208,7 +208,7 @@ public class Board {
 		return next;
 	}
 
-	private int diceRolled(){
+	public int diceRolled(){
 		int first = (int )(Math.random() * 6 + 1);
 		int second = (int )(Math.random() * 6 + 1);
 		return first + second;

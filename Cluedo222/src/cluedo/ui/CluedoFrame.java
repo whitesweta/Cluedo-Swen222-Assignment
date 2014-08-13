@@ -26,10 +26,11 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenuItem item;
-	
+	private Board board;
 	
 	public CluedoFrame(Board board){
 		super("Cluedo");
+		this.board = board;
 		canvas = new CluedoCanvas(board);
 		
 		final int DICE_BUTTON_LOCATION_X = 30;  // location x 
@@ -49,30 +50,53 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 		item = new JMenuItem(new AbstractAction("New Game") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Board b = new Board();
-				canvas = new CluedoCanvas(b);
-				new SelectCharFrame(b);
+				newGame();
 			}
 		});
 		menu.add(item);
-		
-		
+		add(createButtonPanel(),BorderLayout.SOUTH);
 		setSize(canvas.getSizeOfTile()*24,canvas.getSizeOfTile()*25+createButtonPanel().getHeight());
 		setVisible(true); // make sure we are visible!
-		add(createButtonPanel(),BorderLayout.SOUTH);
 		new SelectCharFrame(board);
+	}
+	
+	public void newGame(){
+		Board b = new Board();
+		canvas = new CluedoCanvas(b);
+		board = b;
+		new SelectCharFrame(b);
 	}
 
 	public JPanel createButtonPanel(){
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(4,1));
 		JButton rollDiceButton = new JButton("Roll Dice");//The JButton name.
+		rollDiceButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev) {
+				board.diceRolled();
+			}
+			});
 		buttons.add(rollDiceButton);//Add the button to the JFrame.
 		JButton makeSuggestion = new JButton("Make Suggestion");
+		makeSuggestion.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev) {
+				board.makeSuggestion();
+			}
+			});
 		buttons.add(makeSuggestion);
 		JButton makeAccusation = new JButton("Make Accusation");
+		makeAccusation.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev) {
+				//make accusation
+			}
+			});
 		buttons.add(makeAccusation);
 		JButton endTurn = new JButton("End Turn");
+		endTurn.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev) {
+				board.endTurn();
+			}
+			});
 		buttons.add(endTurn);		
 		return buttons;
 	} 
