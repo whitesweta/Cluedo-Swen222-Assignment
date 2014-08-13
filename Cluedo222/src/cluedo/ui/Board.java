@@ -176,7 +176,7 @@ public class Board {
 		String label = "Make Suggestion";
 		if(forAccusation){
 			label = "Make Accusation";
-			Object[] roomOptions = Weapon.WeaponType.values();
+			Object[] roomOptions = Room.RoomType.values();
 			Type room = (Type) JOptionPane.showInputDialog(null,"Which room?", label,JOptionPane.PLAIN_MESSAGE,null,roomOptions,roomOptions[0]);
 			chosenItems.add(room);
 		}
@@ -246,13 +246,11 @@ public class Board {
 
 	private void addToSolution(List<Card> cards) {
 		int i = new Random().nextInt(cards.size());
-		solution.add(cards.remove(i));
-		for(Room r: rooms.values()){
-
-		}
+		solution.add(cards.remove(i));	
 	}
 
 	private void dealToPlayers(Collection<Card> cards) {
+		for(Card c:solution){System.out.println(c.toString());}
 		int currentPlayer = 0;
 		for (Card c : cards) {
 			System.out.println(currentPlayer+" " + c.toString());

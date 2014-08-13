@@ -87,7 +87,7 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 		JButton makeAccusation = new JButton("Make Accusation");
 		makeAccusation.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev) {
-				//make accusation
+				board.makeAccusation();
 			}
 			});
 		buttons.add(makeAccusation);

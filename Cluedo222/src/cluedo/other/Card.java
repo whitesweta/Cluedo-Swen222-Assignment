@@ -17,6 +17,6 @@ public class Card {
 
 	@Override
 	public String toString() {
-		return "Card [cardImage=" + cardImage + ", item=" + item + "]";
+		return "Card [cardImage=" + cardImage + ", item=" + item.getType() + "]";
 	}
 }
