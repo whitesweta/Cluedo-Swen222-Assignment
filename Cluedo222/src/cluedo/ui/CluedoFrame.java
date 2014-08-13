@@ -64,7 +64,6 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 	}
 
 	public JPanel createButtonPanel(){
-		
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(4,1));
 		JButton rollDiceButton = new JButton("Roll Dice");//The JButton name.
