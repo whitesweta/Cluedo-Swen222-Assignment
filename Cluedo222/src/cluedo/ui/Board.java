@@ -97,7 +97,10 @@ public class Board {
 		BoardTile before = tiles[oldPos.getX()][oldPos.getY()];
 		BoardTile after = tiles[newPos.getX()][newPos.getY()];
 		if(after instanceof SecretTile){
-			
+			//need to see if before was a room tile
+			//then if after was in that room
+			//teleport to other room 
+			//probs need to change the text file again -_-"
 		}else if(!hasRolledDice){
 			JOptionPane.showMessageDialog(null,"Please roll dice first or click on a secret tile");
 			return;
