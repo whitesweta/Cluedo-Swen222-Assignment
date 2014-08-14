@@ -1,23 +1,19 @@
 package cluedo.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
+
 import java.awt.GridLayout;
-import java.awt.Image;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+
 import java.util.Set;
 
 import javax.swing.AbstractAction;
-import javax.swing.BoxLayout;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,11 +22,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
-import cluedo.main.Main;
 import cluedo.other.Card;
 import cluedo.other.Player;
+import cluedo.other.Position;
+import cluedo.tile.BoardTile;
 
 public class CluedoFrame extends JFrame implements MouseListener, ActionListener{
 	private CluedoCanvas canvas;
@@ -44,11 +40,12 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 		super("Cluedo");
 		this.board = board;
 		canvas = new CluedoCanvas(board);
+		canvas.addMouseListener(this);
 		setLayout(new BorderLayout());
 		add(canvas,BorderLayout.CENTER);// add canvas
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack(); // pack components tightly together
-		addMouseListener(this);
+		
 		menuBar = new JMenuBar();
 		menu = new JMenu("Game");
 		menuBar.add(menu);
@@ -146,7 +143,7 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+	
 
 	}
 
@@ -164,7 +161,29 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		System.out.println("recognised clicked");
+		BoardTile selectedTile = null;
+		for (int i = 0; i < board.getTiles().length; i++) {
+			for (int j = 0; j < board.getTiles()[i].length; j++) {
+				BoardTile tile = board.getTiles()[i][j];
+				
+				Position pos = tile.getPosition();
+				int size= canvas.getSizeOfTile();
+				int posx = pos.getX()*size;
+				int posy = pos.getY()*size;
+				System.out.println(pos.getX()+"x"+pos.getY()+"y");
+				if(e.getX()>=posx&&e.getX()<=posx+size&&e.getY()>=posy&&e.getY()<=posy+size){
+					System.out.println("in here");
+					selectedTile=tile;
+					System.out.println(selectedTile+" selected tile");
+					board.move(selectedTile.getPosition());
+				}
+			}
+			
+			
+			//
+			//
+		}
 
 	}
 

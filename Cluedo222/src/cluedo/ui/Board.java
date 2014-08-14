@@ -89,13 +89,15 @@ public class Board {
 	//in game methods
 	
 	public void move (Position newPos){
+		System.out.println("move called");
 		if(hasMoved){
 			JOptionPane.showMessageDialog(null, "You have already moved.");
 		}
 		Player player = players.get(currentPlayer);
 		Position oldPos = player.getPosition();
-		BoardTile before = tiles[oldPos.getX()][oldPos.getY()];
-		BoardTile after = tiles[newPos.getX()][newPos.getY()];
+		System.out.println(oldPos.getX()+"x"+oldPos.getY()+"y");
+		BoardTile before = tiles[oldPos.getY()][oldPos.getX()];
+		BoardTile after = tiles[newPos.getY()][newPos.getX()];
 		if(after instanceof SecretTile){
 			//need to see if before was a room tile
 			//then if after was in that room
@@ -134,6 +136,7 @@ public class Board {
 	}
 
 	public void diceRolled(){
+		hasRolledDice=true;
 		int first = (int )(Math.random() * 6 + 1);
 		int second = (int )(Math.random() * 6 + 1);
 		toMove = first + second;

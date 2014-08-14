@@ -35,11 +35,9 @@ public class CluedoCanvas extends Canvas {
 				BoardTile tile = board.getTiles()[i][j];
 				// System.out.println(i+" x " + j+" y "+ tile.getColour());
 				g.setColor(tile.getColour());
-				g.fillRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,
-						sizeOfTile);
+				g.fillRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,sizeOfTile);
 				g.setColor(Color.BLACK);
-				g.drawRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,
-						sizeOfTile);
+				g.drawRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,sizeOfTile);
 			}
 
 		}
