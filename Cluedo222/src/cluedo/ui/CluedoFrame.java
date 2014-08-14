@@ -179,10 +179,7 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 					board.move(selectedTile.getPosition());
 				}
 			}
-			
-			
-			//
-			//
+		
 		}
 
 	}
