@@ -1,8 +1,11 @@
 package cluedo.other;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import cluedo.tile.DoorTile;
 import cluedo.tile.RoomTile;
 
 
@@ -11,6 +14,7 @@ public class Room implements Item {
 	private RoomType room;
 	private Weapon weapon;
 	private List<RoomTile> roomtiles = new ArrayList<RoomTile>();
+	private Set<DoorTile> doortiles = new HashSet<DoorTile>();
 
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
@@ -20,7 +24,14 @@ public class Room implements Item {
 		room = r;
 	}
 
-	public void addTile(RoomTile r){
+	public void addDoorTile(DoorTile d){
+		doortiles.add(d);
+	}
+	public Set<DoorTile> getDoortiles() {
+		return doortiles;
+	}
+
+	public void addRoomTile(RoomTile r){
 		roomtiles.add(r);
 	}
 

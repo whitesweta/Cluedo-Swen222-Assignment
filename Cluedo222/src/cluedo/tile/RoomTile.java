@@ -22,4 +22,15 @@ public class RoomTile extends BoardTile{
 	public Room getRoom() {
 		return room;
 	}
+	
+	public boolean canReachDoor(Position oldPos, int amountRolled){
+		for(DoorTile d : room.getDoortiles()){
+			int differenceX = Math.abs(oldPos.getX()-d.getPosition().getX());
+			int differenceY = Math.abs(oldPos.getX()-d.getPosition().getX());
+			if(differenceX+differenceY<=amountRolled){
+				return true;
+			}
+		}
+		return false;
+	}
 }

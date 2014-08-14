@@ -38,6 +38,7 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 	private JMenu menu;
 	private JMenuItem item;
 	private Board board;
+	private JPanel cardViewer;
 	
 	public CluedoFrame(Board board){
 		super("Cluedo");
@@ -76,34 +77,35 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 
 	public JPanel createPanelToAdd(){
 		JPanel toAdd = new JPanel();
-		toAdd.setLayout(new FlowLayout(FlowLayout.LEFT));
-		toAdd.add(createButtonPanel());
-		toAdd.add(createCardPanel());
+		//toAdd.setLayout(new FlowLayout(FlowLayout.LEFT));
+		toAdd.setLayout(new BorderLayout());
+		toAdd.add(createButtonPanel(),BorderLayout.WEST);
+		toAdd.add(createCardPanel(),BorderLayout.EAST);
 		return toAdd;
 		
 	}
 	
 	public JPanel createCardPanel(){
-		JPanel cards = new JPanel();
-		cards.setLayout(new GridLayout(1,3));
+		cardViewer = new JPanel();
+		cardViewer.setLayout(new GridLayout(1,3));
 		//cards.setBackground(Color.black);
 		
-		if(board.state==board.PLAYING){
+		if(board.state == board.PLAYING){
 		Player current = board.getCurrentPlayer();
 		Set <Card> playersCards = current.getCards();
 		
 		for(Card card: playersCards){
 			JLabel picLabel = new JLabel(new ImageIcon(card.getImage()));
-			cards.add(picLabel);
+			cardViewer.add(picLabel);
 		}
 	}
 		
 
-		cards.add(new JLabel(new ImageIcon("src/cluedo/ui/images/BALLROOM.jpg"))); 
-		cards.add(new JLabel(new ImageIcon("src/cluedo/ui/images/BILLIARD_ROOM.jpg")));
-		cards.add(new JLabel(new ImageIcon("src/cluedo/ui/images/CANDLESTICK.jpg")));
+		cardViewer.add(new JLabel(new ImageIcon("src/cluedo/ui/images/BALLROOM.jpg"))); 
+		cardViewer.add(new JLabel(new ImageIcon("src/cluedo/ui/images/BILLIARD_ROOM.jpg")));
+		cardViewer.add(new JLabel(new ImageIcon("src/cluedo/ui/images/CANDLESTICK.jpg")));
 		//cards.add(new JButton("WHY"));
-		return cards;
+		return cardViewer;
 	}
 	
 	public JPanel createButtonPanel(){

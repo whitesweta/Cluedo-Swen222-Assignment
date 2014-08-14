@@ -40,10 +40,12 @@ public class Board {
 	private static final int ROW = 25;
 	private static final int COL = 24;
 	private int numEliminated = 0; //number of players that have been eliminated
-	private int toMove = 0;;
+	private int toMove = 0;
 	
 	int state; // this is used to tell us what state we're in. 
 	private int currentPlayer = 0;
+	private boolean hasRolledDice = false;
+	private boolean hasMoved = false;
 	
 	public static final int WAITING = 0;
 	public static final int READY = 1;
@@ -85,18 +87,40 @@ public class Board {
 	
 	//in game methods
 	
-	public void move (int player){
-
+	public void move (Position newPos){
+		if(!hasRolledDice && hasMoved){return;}
+		Position oldPos = players.get(currentPlayer).getPosition();
+		BoardTile before = tiles[oldPos.getX()][oldPos.getY()];
+		BoardTile after = tiles[newPos.getX()][newPos.getY()];
+		if(after instanceof EmptyTile){
+			invalidMovePopup();
+		}
+		else if(before instanceof HallwayTile && after instanceof HallwayTile){
+			int differenceX = Math.abs(oldPos.getX()-newPos.getX());
+			int differenceY = Math.abs(oldPos.getX()-newPos.getX());
+			if(differenceX+differenceY == toMove){
+				players.get(currentPlayer).move(newPos);
+			}
+			else{
+				invalidMovePopup();
+			}	
+		}
+		else if(before instanceof RoomTile){
+			
+		}
+		
+	}
+	
+	private void invalidMovePopup(){
+		//error
 	}
 	
 	public void endTurn(){
-		while(true){
 			toMove=0;
 			int next = nextPlayer(currentPlayer);
 			if(!(players.get(next).isEliminated())){
 				currentPlayer = next;
 				return;
-			}
 		}
 	}
 
@@ -104,7 +128,6 @@ public class Board {
 		int first = (int )(Math.random() * 6 + 1);
 		int second = (int )(Math.random() * 6 + 1);
 		toMove = first + second;
-		move(currentPlayer);
 	}
 	
 	public void makeSuggestion(){
@@ -261,9 +284,6 @@ public class Board {
 				char c = line.charAt(x);
 				Position p = new Position(x,y);
 				switch (c) {
-				case 'D':
-					tiles[y][x] = new DoorTile(p);
-					break;
 				case 'S':
 					tiles[y][x] = new SecretTile(p);
 					break;
@@ -285,8 +305,42 @@ public class Board {
 					String s = String.valueOf(c);
 					RoomTile r = new RoomTile(p,rooms.get(s));
 					tiles[y][x] = r;
-					rooms.get(s).addTile(r);
+					rooms.get(s).addRoomTile(r);
 					break;
+				default:
+					if(java.lang.Character.isDigit(c)){
+						DoorTile d = new DoorTile(p);
+						tiles[y][x] = d;
+						switch(c){
+						case '1':
+							rooms.get("K").addDoorTile(d);
+							break;
+						case '2':
+							rooms.get("B").addDoorTile(d);
+							break;
+						case '3':
+							rooms.get("C").addDoorTile(d);
+							break;
+						case '4':
+							rooms.get("R").addDoorTile(d);
+							break;
+						case '5':
+							rooms.get("L").addDoorTile(d);
+							break;
+						case '6':
+							rooms.get("T").addDoorTile(d);
+							break;
+						case '7':
+							rooms.get("A").addDoorTile(d);
+							break;
+						case '8':
+							rooms.get("G").addDoorTile(d);
+							break;
+						case '9':
+							rooms.get("N").addDoorTile(d);
+							break;
+						}
+					}
 				}
 			}
 		}
