@@ -2,6 +2,7 @@ package cluedo.tile;
 
 import java.awt.Color;
 
+import cluedo.other.Player;
 import cluedo.other.Position;
 
 public class EmptyTile extends BoardTile{
@@ -15,6 +16,21 @@ public class EmptyTile extends BoardTile{
 	public Color getColour() {
 		return Color.BLACK;
 
+	}
+
+	@Override
+	public Position posWhenMovedOut(Position newPos) {
+		throw new RuntimeException("A player should not be in an empty tile");
+	}
+
+	@Override
+	public void movePlayerOut(Player p) {
+		throw new RuntimeException("A player should not be in an empty tile");
+	}
+
+	@Override
+	public boolean canMoveToTile(Position oldPos, int rolledAmt) {
+		return false;
 	}
 
 }

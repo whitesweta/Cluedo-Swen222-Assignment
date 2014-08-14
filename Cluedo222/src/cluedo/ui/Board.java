@@ -88,26 +88,12 @@ public class Board {
 	//in game methods
 	
 	public void move (Position newPos){
+		//if secret tile, dont have to roll dice
 		if(!hasRolledDice && hasMoved){return;}
 		Position oldPos = players.get(currentPlayer).getPosition();
 		BoardTile before = tiles[oldPos.getX()][oldPos.getY()];
 		BoardTile after = tiles[newPos.getX()][newPos.getY()];
-		if(after instanceof EmptyTile){
-			invalidMovePopup();
-		}
-		else if(before instanceof HallwayTile && after instanceof HallwayTile){
-			int differenceX = Math.abs(oldPos.getX()-newPos.getX());
-			int differenceY = Math.abs(oldPos.getX()-newPos.getX());
-			if(differenceX+differenceY == toMove){
-				players.get(currentPlayer).move(newPos);
-			}
-			else{
-				invalidMovePopup();
-			}	
-		}
-		else if(before instanceof RoomTile){
-			
-		}
+		oldPos = before.posWhenMovedOut();
 		
 	}
 	
