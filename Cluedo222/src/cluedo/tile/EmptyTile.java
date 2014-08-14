@@ -22,9 +22,14 @@ public class EmptyTile extends BoardTile{
 	public Position posWhenMovedOut(Position newPos) {
 		throw new RuntimeException("A player should not be in an empty tile");
 	}
+	
+	@Override
+	public void movePlayerIn(Player p) {
+		throw new RuntimeException("A player cannot be in an empty tile");
+	}
 
 	@Override
-	public void movePlayerOut(Player p) {
+	public void movePlayerOut() {
 		throw new RuntimeException("A player should not be in an empty tile");
 	}
 
@@ -32,5 +37,7 @@ public class EmptyTile extends BoardTile{
 	public boolean canMoveToTile(Position oldPos, int rolledAmt) {
 		return false;
 	}
+
+	
 
 }

@@ -23,8 +23,13 @@ public class DoorTile extends BoardTile{
 	}
 
 	@Override
-	public void movePlayerOut(Player p) {
+	public void movePlayerOut() {
 		playerOnTile = null;
+	}
+	
+	@Override
+	public void movePlayerIn(Player p) {
+		playerOnTile = p;
 	}
 
 	@Override
@@ -36,5 +41,7 @@ public class DoorTile extends BoardTile{
 		int differenceY = Math.abs(oldPos.getY()-this.getPosition().getY());
 		return differenceX + differenceY == rolledAmt;
 	}
+
+	
 
 }

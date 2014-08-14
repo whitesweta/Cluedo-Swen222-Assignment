@@ -42,8 +42,13 @@ public class RoomTile extends BoardTile{
 	}
 
 	@Override
-	public void movePlayerOut(Player p) {
+	public void movePlayerOut() {
 		playerOnTile = null;
+	}
+	
+	@Override
+	public void movePlayerIn(Player p) {
+		playerOnTile = p;		
 	}
 
 	@Override

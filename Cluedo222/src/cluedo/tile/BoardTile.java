@@ -11,11 +11,14 @@ public abstract class BoardTile {
 	public BoardTile(Position p){
 		pos = p;
 	}
-	public abstract Color getColour();
-	public abstract Position posWhenMovedOut(Position newPos);
-	public abstract void movePlayerOut(Player p);
-	public abstract boolean canMoveToTile(Position oldPos, int rolledAmt);
+
 	public Position getPosition(){
 		return pos;
 	}
+	
+	public abstract Color getColour();
+	public abstract Position posWhenMovedOut(Position newPos);
+	public abstract void movePlayerOut();
+	public abstract void movePlayerIn(Player p);
+	public abstract boolean canMoveToTile(Position oldPos, int rolledAmt);
 }

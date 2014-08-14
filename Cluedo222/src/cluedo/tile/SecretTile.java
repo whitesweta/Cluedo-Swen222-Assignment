@@ -22,13 +22,19 @@ public class SecretTile extends BoardTile{
 	}
 
 	@Override
-	public void movePlayerOut(Player p) {
+	public void movePlayerOut() {
 		throw new RuntimeException("A player should not be in a secret tile");
 	}
+	
+
+	@Override
+	public void movePlayerIn(Player p) {
+		throw new RuntimeException("A player cannot move into a secret tile");
+	}
+
 
 	@Override
 	public boolean canMoveToTile(Position oldPos, int rolledAmt) {
 		return false;
 	}
-
 }

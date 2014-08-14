@@ -40,12 +40,13 @@ public class Board {
 	private static final int ROW = 25;
 	private static final int COL = 24;
 	private int numEliminated = 0; //number of players that have been eliminated
-	private int toMove = 0;
 	
 	int state; // this is used to tell us what state we're in. 
-	private int currentPlayer = 0;
-	private boolean hasRolledDice = false;
-	private boolean hasMoved = false;
+	private int currentPlayer = 0; //the index of which player's turn it is
+	private boolean hasRolledDice = false; //whether or not the current player has 
+	private boolean hasMoved = false;	   //done any of these things already
+	private boolean hasSuggested = false;
+	private int toMove = 0; //amount of spaces the player can move. The result from dice roll
 	
 	public static final int WAITING = 0;
 	public static final int READY = 1;
@@ -88,25 +89,44 @@ public class Board {
 	//in game methods
 	
 	public void move (Position newPos){
-		//if secret tile, dont have to roll dice
-		if(!hasRolledDice && hasMoved){return;}
-		Position oldPos = players.get(currentPlayer).getPosition();
+		if(hasMoved){
+			JOptionPane.showMessageDialog(null, "You have already moved.");
+		}
+		Player player = players.get(currentPlayer);
+		Position oldPos = player.getPosition();
 		BoardTile before = tiles[oldPos.getX()][oldPos.getY()];
 		BoardTile after = tiles[newPos.getX()][newPos.getY()];
-		oldPos = before.posWhenMovedOut();
+		if(after instanceof SecretTile){
+			
+		}else if(!hasRolledDice){
+			JOptionPane.showMessageDialog(null,"Please roll dice first or click on a secret tile");
+			return;
+		}
+		
+		oldPos = before.posWhenMovedOut(newPos);
+		if(after.canMoveToTile(oldPos, toMove)){
+			player.move(newPos);
+			before.movePlayerOut();
+			after.movePlayerIn(player);
+		}
+		else{
+			JOptionPane.showMessageDialog(null, "Invalid move");
+		}
 		
 	}
-	
-	private void invalidMovePopup(){
-		//error
-	}
+
 	
 	public void endTurn(){
-			toMove=0;
+		toMove = 0;
+		hasRolledDice = false;
+		hasMoved = false;
+		hasSuggested = false;
+		while(true){
 			int next = nextPlayer(currentPlayer);
 			if(!(players.get(next).isEliminated())){
 				currentPlayer = next;
 				return;
+			}
 		}
 	}
 
@@ -114,6 +134,7 @@ public class Board {
 		int first = (int )(Math.random() * 6 + 1);
 		int second = (int )(Math.random() * 6 + 1);
 		toMove = first + second;
+		JOptionPane.showMessageDialog(null, "You have rolled a " + first + " and a " + second);
 	}
 	
 	public void makeSuggestion(){
