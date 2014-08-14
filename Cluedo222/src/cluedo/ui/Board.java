@@ -47,6 +47,7 @@ public class Board {
 	private boolean hasMoved = false;	   //done any of these things already
 	private boolean hasSuggested = false;
 	private int toMove = 0; //amount of spaces the player can move. The result from dice roll
+	private CluedoCanvas canvas;
 	
 	public static final int WAITING = 0;
 	public static final int READY = 1;
@@ -55,7 +56,8 @@ public class Board {
 	public static final int GAMEWON = 4;
 	
 	//Constructor. sets up board with all the tiles from files. creates player and solution collections
-	public Board() {
+	public Board(CluedoCanvas canvas) {
+		this.canvas=canvas;
 		tiles = new BoardTile[ROW][COL];
 		setupRooms();
 		setupWeapons();
@@ -98,6 +100,7 @@ public class Board {
 		System.out.println(oldPos.getX()+"x"+oldPos.getY()+"y");
 		BoardTile before = tiles[oldPos.getY()][oldPos.getX()];
 		BoardTile after = tiles[newPos.getY()][newPos.getX()];
+		
 		if(after instanceof SecretTile){
 			//need to see if before was a room tile
 			//then if after was in that room
@@ -113,6 +116,7 @@ public class Board {
 			player.move(newPos);
 			before.movePlayerOut();
 			after.movePlayerIn(player);
+			canvas.repaint();
 		}
 		else{
 			JOptionPane.showMessageDialog(null, "Invalid move");
@@ -136,11 +140,17 @@ public class Board {
 	}
 
 	public void diceRolled(){
-		hasRolledDice=true;
+		if(!hasRolledDice){
 		int first = (int )(Math.random() * 6 + 1);
 		int second = (int )(Math.random() * 6 + 1);
 		toMove = first + second;
+		hasRolledDice=true;
 		JOptionPane.showMessageDialog(null, "You have rolled a " + first + " and a " + second);
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "You have already rolled this turn");
+		}
+		
 	}
 	
 	public void makeSuggestion(){

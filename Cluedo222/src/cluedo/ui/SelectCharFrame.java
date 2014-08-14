@@ -25,9 +25,11 @@ public class SelectCharFrame extends JFrame{
 	private JTextField nameEntry;
 	private Board board;
 	private int numPlayer;
+	private CluedoCanvas canvas;
 
-	public SelectCharFrame(Board b){
+	public SelectCharFrame(Board b, CluedoCanvas canvas){
 		super("Select Character");
+		this.canvas=canvas;
 		board = b;
 		askForNumber(); //loop for this many times
 		setLayout(new FlowLayout());
@@ -57,6 +59,7 @@ public class SelectCharFrame extends JFrame{
 				else{
 					System.out.println(chara+name);
 					addPlayer(new Player(new Character(Character.CharaType.valueOf(chara)),name));
+					repaintCanvas();
 					removeFromOptions(chara);
 					nameEntry.setText("");
 					numPlayer--;
@@ -70,6 +73,10 @@ public class SelectCharFrame extends JFrame{
 				}});
 		add(done);
 		setVisible(true);
+	}
+	
+	private void repaintCanvas(){
+		canvas.repaint();
 	}
 
 	private void removeFromOptions(String buttonName){

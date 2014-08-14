@@ -16,12 +16,12 @@ import cluedo.tile.BoardTile;
 
 @SuppressWarnings("serial")
 public class CluedoCanvas extends Canvas {
-	private Board board;
+	Board board;
 	private int sizeOfTile = 19;
 	private static final String IMAGE_PATH = "images/";
 
-	public CluedoCanvas(Board board) {
-		this.board = board;
+	public CluedoCanvas(CluedoFrame frame) {
+		this.board = new Board(this);
 	}
 	
 	
@@ -52,6 +52,7 @@ public class CluedoCanvas extends Canvas {
 			g.setColor(Color.black);
 			Position pos = p.getPosition();
 			g.fillOval(pos.getX()*sizeOfTile, pos.getY()*sizeOfTile, sizeOfTile, sizeOfTile);
+			
 		}
 	}
 
@@ -69,6 +70,11 @@ public class CluedoCanvas extends Canvas {
 			// can actually do at this point, except to abort the game.
 			throw new RuntimeException("Unable to load image: " + filename);
 		}
+	}
+
+
+	public Board getBoard() {
+		return board;
 	}
 	
 	

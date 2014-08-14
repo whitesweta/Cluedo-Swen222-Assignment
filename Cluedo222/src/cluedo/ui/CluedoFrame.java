@@ -33,13 +33,13 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenuItem item;
-	private Board board;
 	private JPanel cardViewer;
+	Board board;
 	
-	public CluedoFrame(Board board){
+	public CluedoFrame(){
 		super("Cluedo");
-		this.board = board;
-		canvas = new CluedoCanvas(board);
+		this.canvas = new CluedoCanvas(this);
+		board = canvas.board;
 		canvas.addMouseListener(this);
 		setLayout(new BorderLayout());
 		add(canvas,BorderLayout.CENTER);// add canvas
@@ -62,14 +62,15 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 		add(Panel,BorderLayout.SOUTH);
 		setSize(canvas.getSizeOfTile()*24,(int) (canvas.getSizeOfTile()*25+3000));
 		setVisible(true); // make sure we are visible!
-		new SelectCharFrame(board);
+		new SelectCharFrame(board, canvas);
 	}
 	
 	public void newGame(){
-		Board b = new Board();
-		canvas = new CluedoCanvas(b);
-		board = b;
-		new SelectCharFrame(b);
+		CluedoFrame frame = new CluedoFrame();
+	}
+
+	private CluedoCanvas getCanvas() {
+		return canvas;
 	}
 
 	public JPanel createPanelToAdd(){
