@@ -4,11 +4,24 @@ import java.awt.Color;
 
 import cluedo.other.Player;
 import cluedo.other.Position;
+import cluedo.other.Room;
 
 public class SecretTile extends BoardTile{
-
-	public SecretTile(Position p) {
+	private Room origin;
+	private Room passageTo;
+	
+	public SecretTile(Position p, Room o, Room pt) {
 		super(p);
+		origin = o;
+		passageTo = pt;
+	}
+
+	public Room getOrigin() {
+		return origin;
+	}
+
+	public Room getPassageTo() {
+		return passageTo;
 	}
 
 	@Override
@@ -34,7 +47,7 @@ public class SecretTile extends BoardTile{
 
 
 	@Override
-	public boolean canMoveToTile(Position oldPos, int rolledAmt) {
+	public boolean canMoveToTile(BoardTile oldTile,Position oldPos, int rolledAmt) {
 		return false;
 	}
 }

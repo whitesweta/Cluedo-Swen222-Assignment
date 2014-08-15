@@ -39,6 +39,14 @@ public class Room implements Item {
 		return roomtiles.get(0).getPosition();
 	}
 
+	public RoomTile getUnoccupiedTile(){
+		for(RoomTile r : roomtiles){
+			if(!r.isOccupied()){
+				return r;
+			}
+		}
+		return null;
+	}
 	public Type getType() {
 		return room;
 	}

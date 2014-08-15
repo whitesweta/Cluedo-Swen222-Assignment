@@ -50,11 +50,20 @@ public class RoomTile extends BoardTile{
 	public void movePlayerIn(Player p) {
 		playerOnTile = p;		
 	}
+	
+	public boolean isOccupied(){
+		return playerOnTile != null;
+	}
 
 	@Override
-	public boolean canMoveToTile(Position oldPos,int rolledAmt) {
-		if(playerOnTile != null){
+	public boolean canMoveToTile(BoardTile oldTile,Position oldPos, int rolledAmt) {
+		if(isOccupied()){
 			return false;
+		}
+		if(oldTile instanceof RoomTile){
+			if(((RoomTile)oldTile).room.equals(this.room)){
+				return false;
+			}
 		}
 		for(DoorTile d : room.getDoortiles()){
 			int differenceX = Math.abs(oldPos.getX()-d.getPosition().getX());

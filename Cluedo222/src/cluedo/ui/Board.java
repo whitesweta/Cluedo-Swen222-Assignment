@@ -91,6 +91,12 @@ public class Board {
 	
 	//in game methods
 	
+	/**Moves the current player to where they have clicked on the screen, if it is a valid move.
+	 * A valid move are as follows:
+	 * -player has not moved in this turn and has not rolled the dice. They are in a room with a secret passage. They click on that secret passage tile to be transported to the room the passage connects to
+	 * -player has not moved in this turn and has rolled the dice. The tile they want to go to is not an empty tile. They have rolled a sufficient amount to get to that tile from their old tile
+	 * If it was not a valid move, a popup window will inform the player that it is invalid
+	 * @param Position newPos*/
 	public void move (Position newPos){
 		System.out.println("move called");
 		if(hasMoved){
@@ -101,30 +107,41 @@ public class Board {
 		System.out.println(oldPos.getX()+"x"+oldPos.getY()+"y");
 		BoardTile before = tiles[oldPos.getY()][oldPos.getX()];
 		BoardTile after = tiles[newPos.getY()][newPos.getX()];
-		
-		if(after instanceof SecretTile){
-			//need to see if before was a room tile
-			//then if after was in that room
-			//teleport to other room 
-			//probs need to change the text file again -_-"
+
+		if(after instanceof SecretTile){//player clicked on a secret tile
+			if(!(before instanceof RoomTile)){
+				JOptionPane.showMessageDialog(null, "Must be in the room before using secret passage");
+			}
+			RoomTile roomOrigin = (RoomTile) before;
+			SecretTile passage = (SecretTile) after;
+			if(roomOrigin.equals(passage.getOrigin())){//player was in the room the secret passage is in
+				RoomTile destination = passage.getPassageTo().getUnoccupiedTile(); //get some tile in the room the passage leads to
+				moveToTile(before, destination, player);
+			}
+			else{//player was not in room the secret passage is in
+				JOptionPane.showMessageDialog(null, "Must be in the room before using secret passage");
+			}
 		}else if(!hasRolledDice){
-			JOptionPane.showMessageDialog(null,"Please roll dice first or click on a secret tile");
+			JOptionPane.showMessageDialog(null,"Please roll dice first or click on a secret passage");
 			return;
+		}else{
+			oldPos = before.posWhenMovedOut(newPos);
+			if(after.canMoveToTile(before,oldPos, toMove)){
+				moveToTile(before, after, player);
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Invalid move");
+			}
 		}
-		
-		oldPos = before.posWhenMovedOut(newPos);
-		if(after.canMoveToTile(oldPos, toMove)){
-			player.move(newPos);
-			before.movePlayerOut();
-			after.movePlayerIn(player);
-			canvas.repaint();
-		}
-		else{
-			JOptionPane.showMessageDialog(null, "Invalid move");
-		}
-		
 	}
 
+	private void moveToTile(BoardTile before,BoardTile after,Player player){
+		player.move(after.getPosition());
+		before.movePlayerOut();
+		after.movePlayerIn(player);
+		hasMoved = true;
+		canvas.repaint();
+	}
 	
 	public void endTurn(){
 		toMove = 0;
@@ -164,6 +181,7 @@ public class Board {
 				    JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		hasSuggested = true;
 		Type currentRoom = ((RoomTile)tiles[pos.getX()][pos.getY()]).getRoom().getType();
 		Set<Type> chosenItems = popupOptions(false);
 		chosenItems.add(currentRoom);
@@ -308,8 +326,17 @@ public class Board {
 				char c = line.charAt(x);
 				Position p = new Position(x,y);
 				switch (c) {
-				case 'S':
-					tiles[y][x] = new SecretTile(p);
+				case '!':
+					tiles[y][x] = new SecretTile(p,rooms.get("K"),rooms.get("T"));
+					break;
+				case '?':
+					tiles[y][x] = new SecretTile(p,rooms.get("T"),rooms.get("K"));
+					break;
+				case '@':
+					tiles[y][x] = new SecretTile(p,rooms.get("G"),rooms.get("C"));
+					break;
+				case '$':
+					tiles[y][x] = new SecretTile(p,rooms.get("C"),rooms.get("G"));
 					break;
 				case 'X':
 					tiles[y][x] = new EmptyTile(p);

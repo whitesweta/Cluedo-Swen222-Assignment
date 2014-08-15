@@ -20,5 +20,5 @@ public abstract class BoardTile {
 	public abstract Position posWhenMovedOut(Position newPos);
 	public abstract void movePlayerOut();
 	public abstract void movePlayerIn(Player p);
-	public abstract boolean canMoveToTile(Position oldPos, int rolledAmt);
+	public abstract boolean canMoveToTile(BoardTile oldTile,Position oldPos, int rolledAmt);
 }

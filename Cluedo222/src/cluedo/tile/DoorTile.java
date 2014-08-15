@@ -33,7 +33,7 @@ public class DoorTile extends BoardTile{
 	}
 
 	@Override
-	public boolean canMoveToTile(Position oldPos, int rolledAmt) {
+	public boolean canMoveToTile(BoardTile oldTile,Position oldPos, int rolledAmt) {
 		if(playerOnTile != null){
 			return false;
 		}

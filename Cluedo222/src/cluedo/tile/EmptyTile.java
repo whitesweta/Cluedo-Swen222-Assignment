@@ -34,7 +34,7 @@ public class EmptyTile extends BoardTile{
 	}
 
 	@Override
-	public boolean canMoveToTile(Position oldPos, int rolledAmt) {
+	public boolean canMoveToTile(BoardTile oldTile,Position oldPos, int rolledAmt) {
 		return false;
 	}
 
