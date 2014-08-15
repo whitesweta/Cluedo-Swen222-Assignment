@@ -48,7 +48,7 @@ public class CluedoCanvas extends Canvas implements ImageObserver{
 			Position p = w.getPosition();
 			String filename = w.getType()+".png";
 			System.out.println(filename);
-			g.drawImage(loadImage(filename), p.getX(), p.getY(), this);
+			g.drawImage(loadImage(filename), p.getX()*sizeOfTile, p.getY()*sizeOfTile, this);
 		}
 		for(Player p: board.getPlayers()){
 			g.setColor(Color.black);
@@ -62,7 +62,8 @@ public class CluedoCanvas extends Canvas implements ImageObserver{
 	public static Image loadImage(String filename) {
 		// using the URL means the image loads when stored
 		// in a jar or expanded into individual files.
-		java.net.URL imageURL = CluedoCanvas.class.getResource(File.separator+"images" + File.separator + filename);
+		System.out.println(File.separator);
+		java.net.URL imageURL = CluedoCanvas.class.getResource("images" + File.separator + filename);
 
 		try {
 			System.out.println(imageURL);
