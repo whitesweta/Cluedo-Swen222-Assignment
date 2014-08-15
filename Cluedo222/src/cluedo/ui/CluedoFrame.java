@@ -174,6 +174,7 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+
 		BoardTile selectedTile = null;
 		for (int i = 0; i < board.getTiles().length; i++) {
 			for (int j = 0; j < board.getTiles()[i].length; j++) {
@@ -183,8 +184,9 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 				int size= canvas.getSizeOfTile();
 				int posx = pos.getX()*size;
 				int posy = pos.getY()*size;
-				System.out.println(pos.getX()+"x"+pos.getY()+"y");
+				//System.out.println(pos.getX()+"x"+pos.getY()+"y");
 				if(e.getX()>=posx&&e.getX()<=posx+size&&e.getY()>=posy&&e.getY()<=posy+size){
+
 					selectedTile=tile;
 					board.move(selectedTile.getPosition());
 				}

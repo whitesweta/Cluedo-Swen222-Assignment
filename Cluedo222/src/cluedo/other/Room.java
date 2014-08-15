@@ -22,7 +22,7 @@ public class Room implements Item {
 
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
-		if(weapon != null){
+		if(this.weapon != null){
 			this.weapon.setPosition(getFirstPosition());
 		}
 	}
