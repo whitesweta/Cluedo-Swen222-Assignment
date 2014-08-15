@@ -101,6 +101,7 @@ public class Board {
 		System.out.println("move called");
 		if(hasMoved){
 			JOptionPane.showMessageDialog(null, "You have already moved.");
+			return;
 		}
 		Player player = players.get(currentPlayer);
 		Position oldPos = player.getPosition();
@@ -172,18 +173,19 @@ public class Board {
 	}
 	
 	public void makeSuggestion(){
+		if(hasSuggested){
+			JOptionPane.showMessageDialog(null,"You can only suggest once in a turn");
+			return;
+		}
 		Player p = players.get(currentPlayer);
 		Position pos = p.getPosition();
 		if(!(tiles[pos.getX()][pos.getY()] instanceof RoomTile)){
-			JOptionPane.showMessageDialog(null,
-				    "You cannot make a suggestion outside of a room",
-				    "Invalid move",
-				    JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "You cannot make a suggestion outside of a room");
 			return;
 		}
 		hasSuggested = true;
 		Type currentRoom = ((RoomTile)tiles[pos.getX()][pos.getY()]).getRoom().getType();
-		Set<Type> chosenItems = popupOptions(false);
+		Set<Type> chosenItems = new HashSet<Type>(popupOptions(false));
 		chosenItems.add(currentRoom);
 		Type refutedItem = null;
 		for(int i = 0; i < players.size()-1;i++){
@@ -202,9 +204,14 @@ public class Board {
 		JOptionPane.showMessageDialog(null, message);
 	}
 	
+	private void moveForSuggestion(List<Type> chosenItems){
+		Weapon.WeaponType w = (Weapon.WeaponType) chosenItems.get(0);
+		
+	}
+	
 	public void makeAccusation(){
 		Player p = players.get(currentPlayer);
-		Set<Type> chosenItems = popupOptions(true);
+		Set<Type> chosenItems = new HashSet<Type>(popupOptions(true));
 		boolean lost = false;
 		for(Card c : solution){
 			if(!(chosenItems.contains(c.cardType()))){
@@ -234,8 +241,8 @@ public class Board {
 		//if game lost, show the solution
 	}
 	
-	private Set<Type> popupOptions(boolean forAccusation){
-		Set<Type> chosenItems = new HashSet<Type>();
+	private List<Type> popupOptions(boolean forAccusation){
+		List<Type> chosenItems = new ArrayList<Type>();
 		String label = "Make Suggestion";
 		if(forAccusation){
 			label = "Make Accusation";

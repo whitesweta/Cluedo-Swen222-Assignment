@@ -20,7 +20,7 @@ import cluedo.tile.BoardTile;
 public class CluedoCanvas extends Canvas implements ImageObserver{
 	Board board;
 	private int sizeOfTile = 19;
-	private static final String IMAGE_PATH = "images/";
+	
 
 	public CluedoCanvas(CluedoFrame frame) {
 		this.board = new Board(this);
