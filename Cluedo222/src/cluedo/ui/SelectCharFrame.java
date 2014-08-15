@@ -57,7 +57,7 @@ public class SelectCharFrame extends JFrame{
 					JOptionPane.showMessageDialog(null,"Please enter your name!");
 				}
 				else{
-					System.out.println(chara+name);
+					//System.out.println(chara+name);
 					addPlayer(new Player(new Character(Character.CharaType.valueOf(chara)),name));
 					repaintCanvas();
 					removeFromOptions(chara);

@@ -33,7 +33,9 @@ public class Player {
 		return position;
 	}
 	
-	
+	public String getName() {
+		return name;
+	}
 
 	public boolean isEliminated() {
 		return eliminated;

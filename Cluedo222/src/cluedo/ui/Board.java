@@ -113,6 +113,7 @@ public class Board {
 		if(after instanceof SecretTile){//player clicked on a secret tile
 			if(!(before instanceof RoomTile)){
 				JOptionPane.showMessageDialog(null, "Must be in the room before using secret passage");
+				return;
 			}
 			RoomTile roomOrigin = (RoomTile) before;
 			SecretTile passage = (SecretTile) after;
@@ -125,7 +126,6 @@ public class Board {
 			}
 		}else if(!hasRolledDice){
 			JOptionPane.showMessageDialog(null,"Please roll dice first or click on a secret passage");
-			return;
 		}else{
 			oldPos = before.posWhenMovedOut(newPos);
 			if(after.canMoveToTile(before,oldPos, toMove)){
@@ -154,6 +154,7 @@ public class Board {
 			int next = nextPlayer(currentPlayer);
 			if(!(players.get(next).isEliminated())){
 				currentPlayer = next;
+				JOptionPane.showMessageDialog(null, "It is your turn now, "+ players.get(next).getName());
 				return;
 			}
 		}
@@ -180,14 +181,17 @@ public class Board {
 		}
 		Player p = players.get(currentPlayer);
 		Position pos = p.getPosition();
-		if(!(tiles[pos.getX()][pos.getY()] instanceof RoomTile)){
+		if(!(tiles[pos.getY()][pos.getX()] instanceof RoomTile)){
 			JOptionPane.showMessageDialog(null, "You cannot make a suggestion outside of a room");
 			return;
 		}
 		hasSuggested = true;
-		Type currentRoom = ((RoomTile)tiles[pos.getX()][pos.getY()]).getRoom().getType();
-		Set<Type> chosenItems = new HashSet<Type>(popupOptions(false));
-		chosenItems.add(currentRoom);
+		Room currentRoom = ((RoomTile)tiles[pos.getY()][pos.getX()]).getRoom();
+		Type currentRoomType = currentRoom.getType();
+		List<Type> items = popupOptions(false);
+		Set<Type> chosenItems = new HashSet<Type>(items);
+		chosenItems.add(currentRoomType);
+		moveForSuggestion(items, currentRoom);
 		Type refutedItem = null;
 		for(int i = 0; i < players.size()-1;i++){
 			Player nextPlayer = players.get(nextPlayer(currentPlayer));
@@ -210,8 +214,9 @@ public class Board {
 		for(Weapon weapon:weapons){
 			if(weapon.getType() == w){
 				Room oldRoom = weapon.getRoom();
+				Weapon currentWeapon = currentRoom.getWeapon();
 				currentRoom.setWeapon(weapon);
-				oldRoom.setWeapon(currentRoom.getWeapon());
+				oldRoom.setWeapon(currentWeapon);
 				break;
 			}
 		}
@@ -219,8 +224,9 @@ public class Board {
 		for(Player p : players){
 			if(p.getCharacter().getType() == c){
 				RoomTile toTile = currentRoom.getUnoccupiedTile();
-				BoardTile before = tiles[p.getPosition().getX()][p.getPosition().getX()];
+				BoardTile before = tiles[p.getPosition().getY()][p.getPosition().getX()];
 				moveToTile(before, toTile, p);
+				break;
 			}
 		}
 		
@@ -439,9 +445,11 @@ public class Board {
 	private void setupWeapons(){
 		weapons = new HashSet<Weapon>();
 		List<Room> room = new ArrayList<Room>(rooms.values());
+		Collections.shuffle(room);
 		int i=0;
 		for(Weapon.WeaponType w : Weapon.WeaponType.values()){
 			Weapon weapon = new Weapon(w);
+			weapon.setRoom(room.get(i));
 			weapons.add(weapon);
 			room.get(i).setWeapon(weapon);
 			i++;

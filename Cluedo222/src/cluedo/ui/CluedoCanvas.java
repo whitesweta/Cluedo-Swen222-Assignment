@@ -62,11 +62,11 @@ public class CluedoCanvas extends Canvas implements ImageObserver{
 	public static Image loadImage(String filename) {
 		// using the URL means the image loads when stored
 		// in a jar or expanded into individual files.
-		System.out.println(File.separator);
+		//System.out.println(File.separator);
 		java.net.URL imageURL = CluedoCanvas.class.getResource("images" + File.separator + filename);
 
 		try {
-			System.out.println(imageURL);
+			//System.out.println(imageURL);
 			Image img = ImageIO.read(imageURL);
 			return img;
 		} catch (IOException e) {
