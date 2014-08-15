@@ -40,7 +40,7 @@ public class HallwayTile extends BoardTile{
 		}
 		int differenceX = Math.abs(oldPos.getX()-this.getPosition().getX());
 		int differenceY = Math.abs(oldPos.getY()-this.getPosition().getY());
-		return differenceX + differenceY == rolledAmt;
+		return differenceX + differenceY <= rolledAmt;
 	}
 
 }

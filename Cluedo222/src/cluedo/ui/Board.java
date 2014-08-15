@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 
 import cluedo.other.Card;
 import cluedo.other.Character;
+import cluedo.other.Character.CharaType;
 import cluedo.other.Player;
 import cluedo.other.Position;
 import cluedo.other.Room;
@@ -98,14 +99,14 @@ public class Board {
 	 * If it was not a valid move, a popup window will inform the player that it is invalid
 	 * @param Position newPos*/
 	public void move (Position newPos){
-		System.out.println("move called");
+		//System.out.println("move called");
 		if(hasMoved){
 			JOptionPane.showMessageDialog(null, "You have already moved.");
 			return;
 		}
 		Player player = players.get(currentPlayer);
 		Position oldPos = player.getPosition();
-		System.out.println(oldPos.getX()+"x"+oldPos.getY()+"y");
+		//System.out.println(oldPos.getX()+"x"+oldPos.getY()+"y");
 		BoardTile before = tiles[oldPos.getY()][oldPos.getX()];
 		BoardTile after = tiles[newPos.getY()][newPos.getX()];
 
@@ -204,8 +205,25 @@ public class Board {
 		JOptionPane.showMessageDialog(null, message);
 	}
 	
-	private void moveForSuggestion(List<Type> chosenItems){
+	private void moveForSuggestion(List<Type> chosenItems,Room currentRoom){
 		Weapon.WeaponType w = (Weapon.WeaponType) chosenItems.get(0);
+		for(Weapon weapon:weapons){
+			if(weapon.getType() == w){
+				Room oldRoom = weapon.getRoom();
+				currentRoom.setWeapon(weapon);
+				oldRoom.setWeapon(currentRoom.getWeapon());
+				break;
+			}
+		}
+		Character.CharaType c = (CharaType) chosenItems.get(1);
+		for(Player p : players){
+			if(p.getCharacter().getType() == c){
+				RoomTile toTile = currentRoom.getUnoccupiedTile();
+				BoardTile before = tiles[p.getPosition().getX()][p.getPosition().getX()];
+				moveToTile(before, toTile, p);
+			}
+		}
+		
 		
 	}
 	
@@ -423,8 +441,7 @@ public class Board {
 		List<Room> room = new ArrayList<Room>(rooms.values());
 		int i=0;
 		for(Weapon.WeaponType w : Weapon.WeaponType.values()){
-			Position pos = room.get(i).getFirstPosition();
-			Weapon weapon = new Weapon(w, pos);
+			Weapon weapon = new Weapon(w);
 			weapons.add(weapon);
 			room.get(i).setWeapon(weapon);
 			i++;

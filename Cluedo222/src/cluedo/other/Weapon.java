@@ -6,9 +6,8 @@ public class Weapon implements Item {
 	private Room room;
 	private Position position;
 
-	public Weapon(WeaponType w, Position p){
+	public Weapon(WeaponType w){
 		weapon = w;
-		position = p;
 	}
 
 	public Position getPosition() {

@@ -16,8 +16,15 @@ public class Room implements Item {
 	private List<RoomTile> roomtiles = new ArrayList<RoomTile>();
 	private Set<DoorTile> doortiles = new HashSet<DoorTile>();
 
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
+		if(weapon != null){
+			this.weapon.setPosition(getFirstPosition());
+		}
 	}
 
 	public Room(RoomType r){

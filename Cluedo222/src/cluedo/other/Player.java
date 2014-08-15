@@ -43,6 +43,10 @@ public class Player {
 		this.eliminated = eliminated;
 	}
 
+	public Character getCharacter() {
+		return character;
+	}
+
 	private void setInitialPosition(){
 
 		switch(character.getType()){

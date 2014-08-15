@@ -47,7 +47,7 @@ public class CluedoCanvas extends Canvas implements ImageObserver{
 		for(Weapon w:board.getWeapons()){
 			Position p = w.getPosition();
 			String filename = w.getType()+".png";
-			System.out.println(filename);
+			//System.out.println(filename);
 			g.drawImage(loadImage(filename), p.getX()*sizeOfTile, p.getY()*sizeOfTile, this);
 		}
 		for(Player p: board.getPlayers()){
