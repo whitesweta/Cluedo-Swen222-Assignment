@@ -60,12 +60,13 @@ public class Board {
 		this.canvas=canvas;
 		tiles = new BoardTile[ROW][COL];
 		setupRooms();
-		setupWeapons();
+		
 		try {
 			createBoardFromFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		setupWeapons();
 		players = new ArrayList<Player>();
 		solution = new HashSet<Card>();
 		state = WAITING;
@@ -244,7 +245,7 @@ public class Board {
 		List<Card> roomCards = new ArrayList<Card>();
 		List<Card> allCards = new ArrayList<Card>();
 		for (Weapon w: weapons) {
-			Image image = CluedoCanvas.loadImage(w.toString() + ".jpg");
+			Image image = CluedoCanvas.loadImage(w.getType().toString() + ".jpg");
 			weaponCards.add(new Card(w, image));
 		}
 		addToSolution(weaponCards);
@@ -438,6 +439,10 @@ public class Board {
 
 		public int getState() {
 			return state;
+		}
+
+		public Set<Weapon> getWeapons() {
+			return weapons;
 		}
 		
 }

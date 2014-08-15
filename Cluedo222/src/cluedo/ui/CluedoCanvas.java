@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,10 +13,11 @@ import javax.imageio.ImageIO;
 import cluedo.other.Player;
 import cluedo.other.Position;
 import cluedo.other.Room;
+import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
 
 @SuppressWarnings("serial")
-public class CluedoCanvas extends Canvas {
+public class CluedoCanvas extends Canvas implements ImageObserver{
 	Board board;
 	private int sizeOfTile = 19;
 	private static final String IMAGE_PATH = "images/";
@@ -42,11 +44,11 @@ public class CluedoCanvas extends Canvas {
 
 		}
 		g.setColor(Color.white);
-		for(Room r:board.getRooms()){
-			Position p = r.getFirstPosition();
-			System.out.println(r.getType());
-			System.out.println(p.getX()+" " + p.getY());
-			g.fillOval(p.getX()*sizeOfTile, p.getY()*sizeOfTile, sizeOfTile, sizeOfTile);
+		for(Weapon w:board.getWeapons()){
+			Position p = w.getPosition();
+			String filename = w.getType()+".png";
+			System.out.println(filename);
+			g.drawImage(loadImage(filename), p.getX(), p.getY(), this);
 		}
 		for(Player p: board.getPlayers()){
 			g.setColor(Color.black);
@@ -60,9 +62,10 @@ public class CluedoCanvas extends Canvas {
 	public static Image loadImage(String filename) {
 		// using the URL means the image loads when stored
 		// in a jar or expanded into individual files.
-		java.net.URL imageURL = CluedoCanvas.class.getResource("images" + File.separator + filename);
+		java.net.URL imageURL = CluedoCanvas.class.getResource(File.separator+"images" + File.separator + filename);
 
 		try {
+			System.out.println(imageURL);
 			Image img = ImageIO.read(imageURL);
 			return img;
 		} catch (IOException e) {
