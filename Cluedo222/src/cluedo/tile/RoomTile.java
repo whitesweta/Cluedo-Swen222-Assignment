@@ -18,7 +18,7 @@ public class RoomTile extends BoardTile{
 
 	@Override
 	public Color getColour() {
-		return Color.ORANGE;
+		return new Color(240,230,140);
 	}
 
 	public Room getRoom() {

@@ -13,7 +13,7 @@ public class DoorTile extends BoardTile{
 
 	@Override
 	public Color getColour() {
-		return Color.GRAY;
+		return new Color(170, 117, 112);
 
 	}
 

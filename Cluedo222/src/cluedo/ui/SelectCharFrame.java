@@ -73,6 +73,7 @@ public class SelectCharFrame extends JFrame{
 				}});
 		add(done);
 		setVisible(true);
+
 	}
 	
 	private void repaintCanvas(){

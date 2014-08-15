@@ -14,7 +14,7 @@ public class HallwayTile extends BoardTile{
 
 	@Override
 	public Color getColour() {
-		return Color.RED;
+		return new Color(130,201,164);
 
 	}
 

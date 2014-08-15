@@ -26,7 +26,7 @@ public class SecretTile extends BoardTile{
 
 	@Override
 	public Color getColour() {
-		return Color.MAGENTA;
+		return new Color(147, 100, 141);
 	}
 
 	@Override

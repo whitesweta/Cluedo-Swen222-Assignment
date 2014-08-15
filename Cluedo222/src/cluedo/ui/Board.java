@@ -1,6 +1,8 @@
 package cluedo.ui;
 
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,7 +16,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import cluedo.other.Card;
 import cluedo.other.Character;
@@ -86,6 +92,16 @@ public class Board {
 	public void startGame(){
 		if (state == READY) {
 			state = PLAYING;
+			getCanvas().getFrame().createCardPanel();
+			getCanvas().getFrame().revalidate();
+			String filename=players.get(currentPlayer).getCharacter().getType()+"oval.png";
+				
+			
+			Image image = canvas.loadImage(filename);
+
+			picLabel = new ImageIcon(image);
+			JOptionPane.showMessageDialog(null,"It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType(),"First Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
+			
 		}
 		
 	}
@@ -99,14 +115,12 @@ public class Board {
 	 * If it was not a valid move, a popup window will inform the player that it is invalid
 	 * @param Position newPos*/
 	public void move (Position newPos){
-		//System.out.println("move called");
 		if(hasMoved){
 			JOptionPane.showMessageDialog(null, "You have already moved.");
 			return;
 		}
 		Player player = players.get(currentPlayer);
 		Position oldPos = player.getPosition();
-		//System.out.println(oldPos.getX()+"x"+oldPos.getY()+"y");
 		BoardTile before = tiles[oldPos.getY()][oldPos.getX()];
 		BoardTile after = tiles[newPos.getY()][newPos.getX()];
 
@@ -150,25 +164,50 @@ public class Board {
 		hasRolledDice = false;
 		hasMoved = false;
 		hasSuggested = false;
+		canvas.getFrame().getCardViewer().removeAll();
 		while(true){
 			int next = nextPlayer(currentPlayer);
 			if(!(players.get(next).isEliminated())){
 				currentPlayer = next;
+				canvas.repaint();
+				
+				String filename=players.get(currentPlayer).getCharacter().getType()+"oval.png";
+				
+				
+				Image image = canvas.loadImage(filename);
+
+				picLabel = new ImageIcon(image);
+				JOptionPane.showMessageDialog(null,"It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType(),"Next Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
+				
+				
+				
 				return;
 			}
+			
+			
+			
 		}
 	}
 
+	int first =0;
+	int second=0;
+	Icon picLabel;
 	public void diceRolled(){
 		if(!hasRolledDice){
-		int first = (int )(Math.random() * 6 + 1);
-		int second = (int )(Math.random() * 6 + 1);
+		first = (int )(Math.random() * 6 + 1);
+		second = (int )(Math.random() * 6 + 1);
 		toMove = first + second;
 		hasRolledDice=true;
-		JOptionPane.showMessageDialog(null, "You have rolled a " + first + " and a " + second);
+		Image one = canvas.loadImage("d"+first+".png");
+		Image two = canvas.loadImage("d"+second+".png");
+		Image combined = attachImages((BufferedImage) one,(BufferedImage) two);
+		
+		picLabel = new ImageIcon(combined);
+		JOptionPane.showMessageDialog(null,"You have rolled a "+first+" and a "+second, "Rolled Dice", JOptionPane.PLAIN_MESSAGE,  picLabel);
 		}
-		else {
-			JOptionPane.showMessageDialog(null, "You have already rolled this turn");
+
+		else if(hasRolledDice) {
+			JOptionPane.showMessageDialog(null,"You already rolled a "+first+" and a "+second, "Already Rolled This Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
 		}
 		
 	}
@@ -495,5 +534,25 @@ public class Board {
 		public Set<Weapon> getWeapons() {
 			return weapons;
 		}
+
+		public CluedoCanvas getCanvas() {
+			return canvas;
+		}
+		
+		
+		
+		public BufferedImage attachImages(BufferedImage img1, BufferedImage img2)
+		{
+		        BufferedImage resultImage = new BufferedImage(img1.getWidth() +
+		                img2.getWidth(), img1.getHeight(),
+		                BufferedImage.TYPE_INT_RGB);
+		        Graphics g = resultImage.getGraphics();
+		        g.drawImage(img1, 0, 0, null);
+		        g.drawImage(img2, img1.getWidth(), 0, null);
+		        return resultImage;
+		         
+		}
+		
+		
 		
 }

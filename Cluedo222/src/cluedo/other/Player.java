@@ -1,5 +1,6 @@
 package cluedo.other;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,14 +9,14 @@ import cluedo.other.Weapon.WeaponType;
 
 public class Player {
 	private Character character;
-	private Set<Card> cards;
+	private ArrayList<Card> cards;
 	private String name;
 	private boolean eliminated;
 	private Position position;
 
 	public Player(Character c,String n){
 		character = c;
-		cards = new HashSet<Card>();
+		cards = new ArrayList<Card>();
 		name = n;
 		eliminated = false;
 		setInitialPosition();
@@ -71,7 +72,7 @@ public class Player {
 		}
 	}
 	
-	public Set<Card> getCards(){
+	public ArrayList<Card> getCards(){
 		return cards;
 	}
 
@@ -82,5 +83,9 @@ public class Player {
 			}
 		}
 		return null;
+	}
+
+	public String getName() {
+		return name;
 	}
 }

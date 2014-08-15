@@ -2,19 +2,20 @@
 package cluedo.ui;
 
 import java.awt.BorderLayout;
-
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,8 +36,9 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 	private JMenu menu;
 	private JMenuItem item;
 	private JPanel cardViewer;
+	int number = 0;
 	Board board;
-	
+	Boolean createdcardviewer = false;
 	public CluedoFrame(){
 		super("Cluedo");
 		this.canvas = new CluedoCanvas(this);
@@ -61,7 +63,7 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 		
 		JPanel Panel = createPanelToAdd();
 		add(Panel,BorderLayout.SOUTH);
-		setSize(canvas.getSizeOfTile()*24,(int) (canvas.getSizeOfTile()*25+3000));
+		setSize(canvas.getSizeOfTile()*24,canvas.getSizeOfTile()*25+cardViewer.getHeight()+180);
 		setVisible(true); // make sure we are visible!
 		new SelectCharFrame(board, canvas);
 	}
@@ -76,34 +78,43 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 
 	public JPanel createPanelToAdd(){
 		JPanel toAdd = new JPanel();
-		//toAdd.setLayout(new FlowLayout(FlowLayout.LEFT));
-		toAdd.setLayout(new BorderLayout());
-		toAdd.add(createButtonPanel(),BorderLayout.WEST);
-		toAdd.add(createCardPanel(),BorderLayout.EAST);
+		toAdd.setLayout(new GridLayout());
+		toAdd.add(createButtonPanel(),BorderLayout.PAGE_START);
+		toAdd.add(createCardPanel(),BorderLayout.AFTER_LAST_LINE);
 		return toAdd;
 		
 	}
 	
 	public JPanel createCardPanel(){
+		if(!createdcardviewer){
 		cardViewer = new JPanel();
-		cardViewer.setLayout(new GridLayout(1,3));
-		//cards.setBackground(Color.black);
-		
+		createdcardviewer = true;
+		}
+		cardViewer.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		//cardViewer.setMaximumSize(new Dimension(78*3,250));
 		if(board.state == board.PLAYING){
 		Player current = board.getCurrentPlayer();
-		Set <Card> playersCards = current.getCards();
-		
-		for(Card card: playersCards){
-			JLabel picLabel = new JLabel(new ImageIcon(card.getImage()));
-			cardViewer.add(picLabel);
+		ArrayList <Card> playersCards = current.getCards();
+		//for(Card card:playersCards){
+			for(int i=0; i<playersCards.size();i++){
+			JLabel picLabel = new JLabel(new ImageIcon(playersCards.get(i).getImage()));
+			if(i<=2){
+				c.gridx=i;
+				c.gridy=0;
+				cardViewer.add(picLabel,c);
+			}
+			else{
+				System.out.println(i);
+				c.gridx=i-3;
+				c.gridy=1;
+				cardViewer.add(picLabel,c);
+			}
+			
 		}
 	}
-		
 
-		cardViewer.add(new JLabel(new ImageIcon("src/cluedo/ui/images/BALLROOM.jpg"))); 
-		cardViewer.add(new JLabel(new ImageIcon("src/cluedo/ui/images/BILLIARD_ROOM.jpg")));
-		cardViewer.add(new JLabel(new ImageIcon("src/cluedo/ui/images/CANDLESTICK.jpg")));
-		//cards.add(new JButton("WHY"));
 		return cardViewer;
 	}
 	
@@ -163,7 +174,6 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("recognised clicked");
 		BoardTile selectedTile = null;
 		for (int i = 0; i < board.getTiles().length; i++) {
 			for (int j = 0; j < board.getTiles()[i].length; j++) {
@@ -175,15 +185,20 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 				int posy = pos.getY()*size;
 				System.out.println(pos.getX()+"x"+pos.getY()+"y");
 				if(e.getX()>=posx&&e.getX()<=posx+size&&e.getY()>=posy&&e.getY()<=posy+size){
-					System.out.println("in here");
 					selectedTile=tile;
-					System.out.println(selectedTile+" selected tile");
 					board.move(selectedTile.getPosition());
 				}
 			}
 		
 		}
 
+	}
+	
+	
+	
+
+	public JPanel getCardViewer() {
+		return cardViewer;
 	}
 
 	@Override
