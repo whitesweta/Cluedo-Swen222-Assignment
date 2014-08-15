@@ -243,9 +243,9 @@ public class Board {
 		List<Card> characterCards = new ArrayList<Card>();
 		List<Card> roomCards = new ArrayList<Card>();
 		List<Card> allCards = new ArrayList<Card>();
-		for (Weapon.WeaponType w : Weapon.WeaponType.values()) {
+		for (Weapon w: weapons) {
 			Image image = CluedoCanvas.loadImage(w.toString() + ".jpg");
-			weaponCards.add(new Card(new Weapon(w), image));
+			weaponCards.add(new Card(w, image));
 		}
 		addToSolution(weaponCards);
 		for (Character.CharaType c : Character.CharaType.values()) {
@@ -388,7 +388,9 @@ public class Board {
 		List<Room> room = new ArrayList<Room>(rooms.values());
 		int i=0;
 		for(Weapon.WeaponType w : Weapon.WeaponType.values()){
-			Weapon weapon = new Weapon(w);
+			Position pos = room.get(i).getFirstPosition();
+			Weapon weapon = new Weapon(w, pos);
+			weapons.add(weapon);
 			room.get(i).setWeapon(weapon);
 			i++;
 		}

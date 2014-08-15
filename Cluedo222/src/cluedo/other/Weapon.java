@@ -4,9 +4,11 @@ public class Weapon implements Item {
 	public enum WeaponType implements Type{CANDLESTICK,DAGGER,LEAD_PIPE,REVOLVER,ROPE,SPANNER};
 	private WeaponType weapon;
 	private Room room;
+	private Position position;
 
-	public Weapon(WeaponType w){
+	public Weapon(WeaponType w, Position p){
 		weapon = w;
+		position = p;
 	}
 
 	public Room getRoom() {
