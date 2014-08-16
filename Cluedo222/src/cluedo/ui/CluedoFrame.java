@@ -36,13 +36,13 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 	private JMenu menu;
 	private JMenuItem item;
 	private JPanel cardViewer;
-	int number = 0;
-	Board board;
-	Boolean createdcardviewer = false;
+	private Board board;
+	private boolean createdcardviewer = false;
+	
 	public CluedoFrame(){
 		super("Cluedo");
 		this.canvas = new CluedoCanvas(this);
-		board = canvas.board;
+		board = canvas.getBoard();
 		canvas.addMouseListener(this);
 		setLayout(new BorderLayout());
 		add(canvas,BorderLayout.CENTER);// add canvas

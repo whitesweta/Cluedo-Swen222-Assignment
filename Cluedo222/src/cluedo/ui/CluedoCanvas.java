@@ -12,15 +12,14 @@ import javax.imageio.ImageIO;
 
 import cluedo.other.Player;
 import cluedo.other.Position;
-import cluedo.other.Room;
 import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
 
 @SuppressWarnings("serial")
 public class CluedoCanvas extends Canvas implements ImageObserver{
-	Board board;
-	private int sizeOfTile = 19;
-	CluedoFrame frame;
+	private Board board;
+	private static final int sizeOfTile = 19;
+	private CluedoFrame frame;
 	
 
 	public CluedoCanvas(CluedoFrame frame) {

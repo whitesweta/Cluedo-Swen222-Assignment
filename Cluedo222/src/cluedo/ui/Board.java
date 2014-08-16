@@ -44,22 +44,26 @@ public class Board {
 	private Set<Card> solution;
 	private Map<String,Room> rooms;
 	private Set<Weapon> weapons;
-	private static final int ROW = 25;
-	private static final int COL = 24;
-	private int numEliminated = 0; //number of players that have been eliminated
+	private Icon picLabel; //picture that will appear on popup windows
+	private CluedoCanvas canvas;
 	
+	private int firstDice = 0; //result of first die
+	private int secondDice = 0;//result of second die
+	private int toMove = 0; //amount of spaces the player can move. The result from dice roll
+	private int numEliminated = 0; //number of players that have been eliminated
 	int state; // this is used to tell us what state we're in. 
 	private int currentPlayer = 0; //the index of which player's turn it is
+	
 	private boolean hasRolledDice = false; //whether or not the current player has 
 	private boolean hasMoved = false;	   //done any of these things already
 	private boolean hasSuggested = false;
-	private int toMove = 0; //amount of spaces the player can move. The result from dice roll
-	private CluedoCanvas canvas;
 	
 	public static final int WAITING = 0;
 	public static final int READY = 1;
 	public static final int PLAYING = 2;
 	public static final int GAMEOVER = 3;
+	private static final int ROW = 25;
+	private static final int COL = 24;
 	
 	//Constructor. sets up board with all the tiles from files. creates player and solution collections
 	public Board(CluedoCanvas canvas) {
@@ -93,13 +97,12 @@ public class Board {
 			state = PLAYING;
 			getCanvas().getFrame().createCardPanel();
 			getCanvas().getFrame().revalidate();
-			String filename=players.get(currentPlayer).getCharacter().getType()+"oval.png";
-			Image image = CluedoCanvas.loadImage(filename);
-			picLabel = new ImageIcon(image);
-			JOptionPane.showMessageDialog(null,"It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType(),"First Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
+			popupWithPlayerIcon("It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType());
 		}
 		
 	}
+	
+	
 	
 	//in game methods
 	
@@ -166,36 +169,37 @@ public class Board {
 			if(!(players.get(next).isEliminated())){
 				currentPlayer = next;
 				canvas.repaint();
-				String filename=players.get(currentPlayer).getCharacter().getType()+"oval.png";
-				Image image = canvas.loadImage(filename);
-				picLabel = new ImageIcon(image);
-				JOptionPane.showMessageDialog(null,"It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType(),"Next Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
+				popupWithPlayerIcon("It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType());
 				return;
 			}
 			next = nextPlayer(next);					
 		}
 	}
+	
+	private void popupWithPlayerIcon(String message){
+		String filename=players.get(currentPlayer).getCharacter().getType()+"oval.png";
+		Image image = CluedoCanvas.loadImage(filename);
+		picLabel = new ImageIcon(image);
+		JOptionPane.showMessageDialog(null,message,"Cluedo", JOptionPane.PLAIN_MESSAGE,  picLabel);
+	}
 
-	int first =0;
-	int second=0;
-	Icon picLabel;
 	public void diceRolled(){
 		if(state == GAMEOVER){return;}
 		if(!hasRolledDice){
-		first = (int )(Math.random() * 6 + 1);
-		second = (int )(Math.random() * 6 + 1);
-		toMove = first + second;
+		firstDice = (int )(Math.random() * 6 + 1);
+		secondDice = (int )(Math.random() * 6 + 1);
+		toMove = firstDice + secondDice;
 		hasRolledDice=true;
-		Image one = canvas.loadImage("d"+first+".png");
-		Image two = canvas.loadImage("d"+second+".png");
+		Image one = CluedoCanvas.loadImage("d"+firstDice+".png");
+		Image two = CluedoCanvas.loadImage("d"+secondDice+".png");
 		Image combined = attachImages((BufferedImage) one,(BufferedImage) two);
 		
 		picLabel = new ImageIcon(combined);
-		JOptionPane.showMessageDialog(null,"You have rolled a "+first+" and a "+second, "Rolled Dice", JOptionPane.PLAIN_MESSAGE,  picLabel);
+		JOptionPane.showMessageDialog(null,"You have rolled a "+firstDice+" and a "+secondDice, "Rolled Dice", JOptionPane.PLAIN_MESSAGE,  picLabel);
 		}
 
 		else if(hasRolledDice) {
-			JOptionPane.showMessageDialog(null,"You already rolled a "+first+" and a "+second, "Already Rolled This Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
+			JOptionPane.showMessageDialog(null,"You already rolled a "+firstDice+" and a "+secondDice, "Already Rolled This Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
 		}
 		
 	}
@@ -293,9 +297,10 @@ public class Board {
 	private void endGame(boolean gameWon){
 		if(gameWon){
 			String name = players.get(currentPlayer).getName();
-			JOptionPane.showMessageDialog(null, name +" has solved the murder!. " + name + " has won!");	
+			popupWithPlayerIcon(name +" has solved the murder!. " + name + " has won!");
+			
 		}else{
-			String message = "The murder has not been solved. The solution was ";
+			String message = "The murder has not been solved. You lose. The solution was ";
 			for(Card c : solution){
 				message += c.cardType()+" ";
 			}
