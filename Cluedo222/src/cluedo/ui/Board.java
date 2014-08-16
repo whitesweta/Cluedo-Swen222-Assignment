@@ -218,10 +218,11 @@ public class Board {
 			JOptionPane.showMessageDialog(null, "You cannot make a suggestion outside of a room");
 			return;
 		}
-		hasSuggested = true;
 		Room currentRoom = ((RoomTile)tiles[pos.getY()][pos.getX()]).getRoom();
 		Type currentRoomType = currentRoom.getType();
 		List<Type> items = popupOptions(false);
+		if(items == null){return;} //user pressed cancel
+		hasSuggested = true;
 		Set<Type> chosenItems = new HashSet<Type>(items);
 		chosenItems.add(currentRoomType);
 		moveForSuggestion(items, currentRoom);
@@ -269,7 +270,9 @@ public class Board {
 	public void makeAccusation(){
 		if(state == GAMEOVER){return;}
 		Player p = players.get(currentPlayer);
-		Set<Type> chosenItems = new HashSet<Type>(popupOptions(true));
+		List<Type> items = popupOptions(true);
+		if(items == null){return;}//user pressed cancel
+		Set<Type> chosenItems = new HashSet<Type>(items);
 		boolean lost = false;
 		for(Card c : solution){
 			if(!(chosenItems.contains(c.cardType()))){
@@ -318,14 +321,17 @@ public class Board {
 			label = "Make Accusation";
 			Object[] roomOptions = Room.RoomType.values();
 			Type room = (Type) JOptionPane.showInputDialog(null,"Which room?", label,JOptionPane.PLAIN_MESSAGE,null,roomOptions,roomOptions[0]);
+			if(room == null){return null;}//user pressed cancel
 			chosenItems.add(room);
 		}
 		Object[] weaponOptions = Weapon.WeaponType.values();
 		Type weapon = (Type) JOptionPane.showInputDialog(null,"Which weapon?", label ,JOptionPane.PLAIN_MESSAGE,null,weaponOptions,weaponOptions[0]);
+		if(weapon == null){return null;}//user pressed cancel
 		chosenItems.add(weapon);
 		Object[] characterOptions = Character.CharaType.values();
 		Type character = (Type) JOptionPane.showInputDialog(null,"Which character?",
 				label,JOptionPane.PLAIN_MESSAGE,null,characterOptions,characterOptions[0]);
+		if(character == null){return null;}//user pressed cancel
 		chosenItems.add(character);
 		return chosenItems;
 	}
@@ -333,7 +339,7 @@ public class Board {
 	
 
 	// assumes all the players have been created
-	//fix later to use the sets instead
+
 	private void dealCards() {
 		List<Card> weaponCards = new ArrayList<Card>();
 		List<Card> characterCards = new ArrayList<Card>();
@@ -560,19 +566,18 @@ public class Board {
 			}
 		}
 		
-		
-		public BufferedImage attachImages(BufferedImage img1, BufferedImage img2)
-		{
-		        BufferedImage resultImage = new BufferedImage(img1.getWidth() +
-		                img2.getWidth(), img1.getHeight(),
-		                BufferedImage.TYPE_INT_RGB);
-		        Graphics g = resultImage.getGraphics();
-		        g.drawImage(img1, 0, 0, null);
-		        g.drawImage(img2, img1.getWidth(), 0, null);
-		        return resultImage;
-		         
+
+		public BufferedImage attachImages(BufferedImage img1, BufferedImage img2){
+			BufferedImage resultImage = new BufferedImage(img1.getWidth() +
+					img2.getWidth(), img1.getHeight(),
+					BufferedImage.TYPE_INT_RGB);
+			Graphics g = resultImage.getGraphics();
+			g.drawImage(img1, 0, 0, null);
+			g.drawImage(img2, img1.getWidth(), 0, null);
+			return resultImage;
+
 		}
-		
+
 		
 		
 }
