@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +28,12 @@ public class SelectCharFrame extends JFrame{
 	private int numPlayer;
 	private CluedoCanvas canvas;
 
-	public SelectCharFrame(Board b, CluedoCanvas canvas){
+	public SelectCharFrame(Board b, CluedoCanvas canvas,WindowListener wl){
 		super("Select Character");
 		this.canvas=canvas;
 		board = b;
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(wl);
 		askForNumber(); //loop for this many times
 		setLayout(new FlowLayout());
 		group = new ButtonGroup();
@@ -57,7 +60,6 @@ public class SelectCharFrame extends JFrame{
 					JOptionPane.showMessageDialog(null,"Please enter your name!");
 				}
 				else{
-					//System.out.println(chara+name);
 					addPlayer(new Player(new Character(Character.CharaType.valueOf(chara)),name));
 					repaintCanvas();
 					removeFromOptions(chara);
@@ -98,15 +100,20 @@ public class SelectCharFrame extends JFrame{
 	private void askForNumber(){
 		Object[] options = {3,4,5,6};
 		Integer num = null;
-		while(num == null){
-		num = (Integer) JOptionPane.showInputDialog(null,"How many players?",
-				"Number of Players",JOptionPane.PLAIN_MESSAGE,null,options,"3");
+		while(true){
+			num = (Integer) JOptionPane.showInputDialog(null,"How many players?",
+					"Number of Players",JOptionPane.PLAIN_MESSAGE,null,options,"3");
+			if(num != null){
+				break;
+			}
+			int result = JOptionPane.showConfirmDialog(this, "Do you want to quit?","Quit",JOptionPane.YES_NO_OPTION);
+			if(result == JOptionPane.YES_OPTION){
+				System.exit(0);
+			}
 		}
 		numPlayer = num;
 	}
 	
-	
-	//moved this from board. hoepfully doesnt break :/
 	public void addPlayer(Player p) {
 		if (board.getState() == Board.WAITING) {
 			board.getPlayers().add(p);

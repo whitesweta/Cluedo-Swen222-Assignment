@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import cluedo.other.Card;
@@ -30,7 +33,7 @@ import cluedo.other.Player;
 import cluedo.other.Position;
 import cluedo.tile.BoardTile;
 
-public class CluedoFrame extends JFrame implements MouseListener, ActionListener{
+public class CluedoFrame extends JFrame implements WindowListener,MouseListener, ActionListener{
 	private CluedoCanvas canvas;
 	private JMenuBar menuBar;
 	private JMenu menu;
@@ -46,7 +49,8 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 		canvas.addMouseListener(this);
 		setLayout(new BorderLayout());
 		add(canvas,BorderLayout.CENTER);// add canvas
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(this);
 		pack(); // pack components tightly together
 		
 		menuBar = new JMenuBar();
@@ -65,7 +69,7 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 		add(Panel,BorderLayout.SOUTH);
 		setSize(canvas.getSizeOfTile()*24,canvas.getSizeOfTile()*25+cardViewer.getHeight()+180);
 		setVisible(true); // make sure we are visible!
-		new SelectCharFrame(board, canvas);
+		new SelectCharFrame(board, canvas,this);
 	}
 	
 	public void newGame(){
@@ -156,20 +160,14 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-	
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -212,6 +210,49 @@ public class CluedoFrame extends JFrame implements MouseListener, ActionListener
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		int result = JOptionPane.showConfirmDialog(this, "Do you want to quit this game?","Quit",JOptionPane.YES_NO_OPTION);
+		if(result == JOptionPane.YES_OPTION){
+			System.exit(0);
+		}
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
