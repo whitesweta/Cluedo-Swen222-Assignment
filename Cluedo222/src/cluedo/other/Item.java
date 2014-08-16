@@ -1,14 +1,15 @@
 package cluedo.other;
 
 /**
- * Represents an Item in the Game. 
+ * Represents an Item in the Game.
+ * 
  * @author Shweta Barapatre and Maria Libunao
  *
  */
 public interface Item {
-	
+
 	/**
-	 * get the type of the item
+	 * get the Type of the item
 	 */
 	public Type getType();
 }

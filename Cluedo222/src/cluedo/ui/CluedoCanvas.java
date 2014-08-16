@@ -15,64 +15,98 @@ import cluedo.other.Position;
 import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
 
+/**
+ * Represents the canvas that does the drawing of the tiles, the players and the
+ * weapons that are on the board
+ * 
+ * @author Shweta Barapatre and Maria Libunao
+ *
+ */
 @SuppressWarnings("serial")
-public class CluedoCanvas extends Canvas implements ImageObserver{
+public class CluedoCanvas extends Canvas implements ImageObserver {
 	private Board board;
 	private static final int sizeOfTile = 19;
 	private CluedoFrame frame;
-	
+
+	/**
+	 * Constructs the canvas
+	 * 
+	 * @param frame
+	 *            the frame that called the construction of the canvas
+	 */
 
 	public CluedoCanvas(CluedoFrame frame) {
 		this.board = new Board(this);
 		this.frame = frame;
 	}
-	
-	
+
+	/**
+	 * 
+	 * @return returns the frame that called the canvas
+	 */
 	public CluedoFrame getFrame() {
 		return frame;
 	}
 
-
+	/**
+	 * @return the width or height of an indivual tile
+	 */
 	public int getSizeOfTile() {
 		return sizeOfTile;
 	}
 
+	/**
+	 * draws the tiles, the weapons and the players on the canvas at their given
+	 * position tiles are drawn as squares, the szie indicated by teh size of
+	 * tile feild players are one tile large and weapons four tiles
+	 */
 	public void paint(Graphics g) {
 		for (int i = 0; i < board.getTiles().length; i++) {
 			for (int j = 0; j < board.getTiles()[i].length; j++) {
 				BoardTile tile = board.getTiles()[i][j];
 				g.setColor(tile.getColour());
-				g.fillRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,sizeOfTile);
+				g.fillRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,
+						sizeOfTile);
 				g.setColor(Color.BLACK);
-				g.drawRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,sizeOfTile);
+				g.drawRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,
+						sizeOfTile);
 			}
 
 		}
-		for(Weapon w:board.getWeapons()){
+		for (Weapon w : board.getWeapons()) {
 			Position p = w.getPosition();
-			String filename = w.getType()+".png";
-			g.drawImage(loadImage(filename), p.getX()*sizeOfTile, p.getY()*sizeOfTile, this);
+			String filename = w.getType() + ".png";
+			g.drawImage(loadImage(filename), p.getX() * sizeOfTile, p.getY()
+					* sizeOfTile, this);
 		}
-		for(Player p: board.getPlayers()){	
+		for (Player p : board.getPlayers()) {
 			Position pos = p.getPosition();
-			String filename = p.getCharacter().getType()+".png";
-			if(p.equals(board.getCurrentPlayer()) ){
+			String filename = p.getCharacter().getType() + ".png";
+			if (p.equals(board.getCurrentPlayer())) {
 				g.setColor(new Color(0, 191, 255));
-				g.fillRect(pos.getX()*sizeOfTile, pos.getY()*sizeOfTile, sizeOfTile, sizeOfTile);
+				g.fillRect(pos.getX() * sizeOfTile, pos.getY() * sizeOfTile,
+						sizeOfTile, sizeOfTile);
 			}
-			
-			g.drawImage(loadImage(filename), pos.getX()*sizeOfTile, pos.getY()*sizeOfTile, this);
-			
-			
+
+			g.drawImage(loadImage(filename), pos.getX() * sizeOfTile,
+					pos.getY() * sizeOfTile, this);
+
 		}
 	}
 
-
+	/**
+	 * helper method to load and image from the filename
+	 * 
+	 * @param filename
+	 *            name of the file
+	 * @return an Image object of the file
+	 */
 	public static Image loadImage(String filename) {
 		// using the URL means the image loads when stored
 		// in a jar or expanded into individual files.
 
-		java.net.URL imageURL = CluedoCanvas.class.getResource("images" + File.separator + filename);
+		java.net.URL imageURL = CluedoCanvas.class.getResource("images"
+				+ File.separator + filename);
 
 		try {
 
@@ -85,11 +119,13 @@ public class CluedoCanvas extends Canvas implements ImageObserver{
 		}
 	}
 
-
+	/**
+	 * returns the board that is called by this canvas class
+	 * 
+	 * @return
+	 */
 	public Board getBoard() {
 		return board;
 	}
-	
-	
 
 }
