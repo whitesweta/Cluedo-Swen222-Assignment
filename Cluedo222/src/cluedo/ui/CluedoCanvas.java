@@ -7,11 +7,13 @@ import java.awt.Image;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
 import cluedo.other.Player;
 import cluedo.other.Position;
+import cluedo.other.Room;
 import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
 
@@ -71,8 +73,17 @@ public class CluedoCanvas extends Canvas implements ImageObserver {
 				g.drawRect(j * sizeOfTile, i * sizeOfTile, sizeOfTile,
 						sizeOfTile);
 			}
+	
 
 		}
+		
+		for(Room r: board.getRooms()){
+			
+			Position pos = r.getFirstPosition();
+			String filename = r.getType() + "text.png";
+			g.drawImage(loadImage(filename), pos.getX() * sizeOfTile,pos.getY() * sizeOfTile, this);
+		}
+		
 		for (Weapon w : board.getWeapons()) {
 			Position p = w.getPosition();
 			String filename = w.getType() + ".png";
@@ -92,6 +103,7 @@ public class CluedoCanvas extends Canvas implements ImageObserver {
 					pos.getY() * sizeOfTile, this);
 
 		}
+
 	}
 
 	/**

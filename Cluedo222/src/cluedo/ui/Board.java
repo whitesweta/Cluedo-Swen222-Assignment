@@ -316,10 +316,18 @@ public class Board {
 		String message = null;
 		if (refutedItem == null) {
 			message = "The other players cannot refute your suggestion";
+			int random = (int) (Math.random() * 1 + 1);
+			String filename = "unknown"+random+".jpg";
+			Image image = CluedoCanvas.loadImage(filename);
+			picLabel = new ImageIcon(image);
+			JOptionPane.showMessageDialog(null, message, "Suggestion",JOptionPane.PLAIN_MESSAGE, picLabel);
 		} else {
 			message = "A player has " + refutedItem + " in their cards";
+			String filename = refutedItem+".jpg";
+			Image image = CluedoCanvas.loadImage(filename);
+			picLabel = new ImageIcon(image);
+			JOptionPane.showMessageDialog(null, message, "Suggestion",JOptionPane.PLAIN_MESSAGE, picLabel);
 		}
-		JOptionPane.showMessageDialog(null, message);
 	}
 
 	/**
@@ -737,8 +745,7 @@ public class Board {
 	}
 
 	public BufferedImage attachImages(BufferedImage img1, BufferedImage img2) {
-		BufferedImage resultImage = new BufferedImage(img1.getWidth()
-				+ img2.getWidth(), img1.getHeight(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage resultImage = new BufferedImage(img1.getWidth() + img2.getWidth(),img1.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics g = resultImage.getGraphics();
 		g.drawImage(img1, 0, 0, null);
 		g.drawImage(img2, img1.getWidth(), 0, null);

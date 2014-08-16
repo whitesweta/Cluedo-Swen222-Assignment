@@ -66,6 +66,13 @@ public class Room implements Item {
 	public void addDoorTile(DoorTile d) {
 		doortiles.add(d);
 	}
+	/**
+	 * 
+	 * @return Returns list of roomtiles in room
+	 */
+	public List<RoomTile> getRoomTiles(){
+		return roomtiles;
+	}
 
 	/**
 	 * returns set of door tiles
@@ -117,4 +124,6 @@ public class Room implements Item {
 	public Type getType() {
 		return room;
 	}
+
+	
 }

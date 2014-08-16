@@ -19,7 +19,7 @@ public class RoomTile extends BoardTile {
 	private Player playerOnTile = null;
 
 	/**
-	 * Construct a Roomtile a a given position onto the board on teh canvas
+	 * Construct a Roomtile a a given position onto the board on the canvas
 	 * 
 	 * @param p
 	 *            position of room tile
@@ -30,7 +30,7 @@ public class RoomTile extends BoardTile {
 		super(p);
 		room = r;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
