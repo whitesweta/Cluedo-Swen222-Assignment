@@ -113,7 +113,7 @@ public class Board {
 	 * If it was not a valid move, a popup window will inform the player that it is invalid
 	 * @param Position newPos*/
 	public void move (Position newPos){
-		if(state == GAMEOVER){return;}
+		if(state != PLAYING){return;}
 		if(hasMoved){
 			JOptionPane.showMessageDialog(null, "You have already moved.");
 			return;
@@ -152,7 +152,7 @@ public class Board {
 
 	private void moveToTile(BoardTile before,BoardTile after,Player player){
 		player.move(after.getPosition());
-		before.movePlayerOut();
+		before.movePlayerOut(); 
 		after.movePlayerIn(player);
 		hasMoved = true;
 		canvas.repaint();
