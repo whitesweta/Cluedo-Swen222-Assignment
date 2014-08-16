@@ -174,7 +174,7 @@ public class CluedoFrame extends JFrame implements WindowListener,MouseListener,
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
+		
 		BoardTile selectedTile = null;
 		for (int i = 0; i < board.getTiles().length; i++) {
 			for (int j = 0; j < board.getTiles()[i].length; j++) {
