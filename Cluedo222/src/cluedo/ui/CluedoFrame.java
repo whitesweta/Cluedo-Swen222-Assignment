@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -67,12 +68,13 @@ public class CluedoFrame extends JFrame implements WindowListener,MouseListener,
 		
 		JPanel Panel = createPanelToAdd();
 		add(Panel,BorderLayout.SOUTH);
-		setSize(canvas.getSizeOfTile()*24,canvas.getSizeOfTile()*25+cardViewer.getHeight()+180);
+		setSize(canvas.getSizeOfTile()*24,canvas.getSizeOfTile()*25+500);
 		setVisible(true); // make sure we are visible!
 		new SelectCharFrame(board, canvas,this);
 	}
 	
 	public void newGame(){
+		this.dispose();
 		CluedoFrame frame = new CluedoFrame();
 	}
 

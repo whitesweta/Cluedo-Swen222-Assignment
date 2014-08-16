@@ -169,6 +169,8 @@ public class Board {
 			if(!(players.get(next).isEliminated())){
 				currentPlayer = next;
 				canvas.repaint();
+				getCanvas().getFrame().createCardPanel();
+				getCanvas().getFrame().revalidate();
 				popupWithPlayerIcon("It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType());
 				return;
 			}
