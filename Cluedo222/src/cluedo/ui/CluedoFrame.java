@@ -1,4 +1,3 @@
-//TESTING A THING. DELETE THIS
 package cluedo.ui;
 
 import java.awt.BorderLayout;

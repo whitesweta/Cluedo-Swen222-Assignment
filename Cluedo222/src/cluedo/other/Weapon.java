@@ -1,5 +1,11 @@
 package cluedo.other;
 
+/**
+ * Represent a weapon in the game from given , implements Type.
+ * @author Shweta Barapatre and Maria Libunao
+ *
+ */
+
 public class Weapon implements Item {
 	public enum WeaponType implements Type{CANDLESTICK,DAGGER,LEAD_PIPE,REVOLVER,ROPE,SPANNER};
 	private WeaponType weapon;
