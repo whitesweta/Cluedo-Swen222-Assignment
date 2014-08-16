@@ -93,7 +93,9 @@ public class SelectCharFrame extends JFrame{
 			}
 		}
 		jrButtons.remove(i);
-		jrButtons.get(0).setSelected(true);
+		if(jrButtons.size()!=0){
+			jrButtons.get(0).setSelected(true);
+		}
 		validate();
 	}
 
