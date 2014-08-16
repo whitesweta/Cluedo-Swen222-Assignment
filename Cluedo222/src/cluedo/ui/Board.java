@@ -84,22 +84,20 @@ public class Board {
 	
 	//state changing methods
 
-	public void readyToStart(boolean guiMode) {
+	public void readyToStart() {
 		if (state == WAITING) {
 			state = READY;
 			dealCards();
 		}
-		startGame(guiMode);
+		startGame();
 	}
 
-	public void startGame(boolean guiMode){
+	public void startGame(){
 		if (state == READY) {
 			state = PLAYING;
-			if(guiMode){
 				getCanvas().getFrame().createCardPanel();
 				getCanvas().getFrame().revalidate();
 				popupWithPlayerIcon("It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType());
-			}
 		}
 		
 	}

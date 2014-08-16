@@ -67,7 +67,7 @@ public class SelectCharFrame extends JFrame{
 					numPlayer--;
 					if(numPlayer == 0){
 						setVisible(false);
-						board.readyToStart(true);
+						board.readyToStart();
 						
 					}
 				}
