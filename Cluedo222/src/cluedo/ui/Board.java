@@ -60,7 +60,6 @@ public class Board {
 	public static final int READY = 1;
 	public static final int PLAYING = 2;
 	public static final int GAMEOVER = 3;
-	public static final int GAMEWON = 4;
 	
 	//Constructor. sets up board with all the tiles from files. creates player and solution collections
 	public Board(CluedoCanvas canvas) {
@@ -95,13 +94,9 @@ public class Board {
 			getCanvas().getFrame().createCardPanel();
 			getCanvas().getFrame().revalidate();
 			String filename=players.get(currentPlayer).getCharacter().getType()+"oval.png";
-				
-			
-			Image image = canvas.loadImage(filename);
-
+			Image image = CluedoCanvas.loadImage(filename);
 			picLabel = new ImageIcon(image);
 			JOptionPane.showMessageDialog(null,"It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType(),"First Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
-			
 		}
 		
 	}
@@ -115,6 +110,7 @@ public class Board {
 	 * If it was not a valid move, a popup window will inform the player that it is invalid
 	 * @param Position newPos*/
 	public void move (Position newPos){
+		if(state == GAMEOVER){return;}
 		if(hasMoved){
 			JOptionPane.showMessageDialog(null, "You have already moved.");
 			return;
@@ -165,25 +161,18 @@ public class Board {
 		hasMoved = false;
 		hasSuggested = false;
 		canvas.getFrame().getCardViewer().removeAll();
+		int next = nextPlayer(currentPlayer);
 		while(true){
-			int next = nextPlayer(currentPlayer);
 			if(!(players.get(next).isEliminated())){
 				currentPlayer = next;
 				canvas.repaint();
-				
 				String filename=players.get(currentPlayer).getCharacter().getType()+"oval.png";
-				
-				
 				Image image = canvas.loadImage(filename);
-
 				picLabel = new ImageIcon(image);
 				JOptionPane.showMessageDialog(null,"It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType(),"Next Turn", JOptionPane.PLAIN_MESSAGE,  picLabel);
-
 				return;
 			}
-			
-			
-			
+			next = nextPlayer(next);					
 		}
 	}
 
@@ -191,6 +180,7 @@ public class Board {
 	int second=0;
 	Icon picLabel;
 	public void diceRolled(){
+		if(state == GAMEOVER){return;}
 		if(!hasRolledDice){
 		first = (int )(Math.random() * 6 + 1);
 		second = (int )(Math.random() * 6 + 1);
@@ -211,6 +201,7 @@ public class Board {
 	}
 	
 	public void makeSuggestion(){
+		if(state == GAMEOVER){return;}
 		if(hasSuggested){
 			JOptionPane.showMessageDialog(null,"You can only suggest once in a turn");
 			return;
@@ -270,6 +261,7 @@ public class Board {
 	}
 	
 	public void makeAccusation(){
+		if(state == GAMEOVER){return;}
 		Player p = players.get(currentPlayer);
 		Set<Type> chosenItems = new HashSet<Type>(popupOptions(true));
 		boolean lost = false;
@@ -280,25 +272,36 @@ public class Board {
 				break;
 			}
 		}
-		String message = "";
 		if(lost){
-			message = "You have made a wrong accusation. The solution is: ";
+			String message = "You have made a wrong accusation. The solution is: ";
 			for(Card c : solution){
 				message += c.cardType()+" ";
 			}
+			JOptionPane.showMessageDialog(null, message);
 			if(++numEliminated == players.size()){
 				endGame(false);
+			}else{
+			endTurn();
 			}
 		}
 		else{
-			message = "You have solved the murder! You win";
 			endGame(true);
 		}
-		JOptionPane.showMessageDialog(null, message);
+		
 	}
 	
 	private void endGame(boolean gameWon){
-		//if game lost, show the solution
+		if(gameWon){
+			String name = players.get(currentPlayer).getName();
+			JOptionPane.showMessageDialog(null, name +" has solved the murder!. " + name + " has won!");	
+		}else{
+			String message = "The murder has not been solved. The solution was ";
+			for(Card c : solution){
+				message += c.cardType()+" ";
+			}
+			JOptionPane.showMessageDialog(null, message);
+		}
+		state = GAMEOVER;
 	}
 	
 	private List<Type> popupOptions(boolean forAccusation){
