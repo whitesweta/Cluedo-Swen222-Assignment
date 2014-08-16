@@ -84,20 +84,22 @@ public class Board {
 	
 	//state changing methods
 
-	public void readyToStart() {
+	public void readyToStart(boolean guiMode) {
 		if (state == WAITING) {
 			state = READY;
 			dealCards();
 		}
-		startGame();
+		startGame(guiMode);
 	}
 
-	public void startGame(){
+	public void startGame(boolean guiMode){
 		if (state == READY) {
 			state = PLAYING;
-			getCanvas().getFrame().createCardPanel();
-			getCanvas().getFrame().revalidate();
-			popupWithPlayerIcon("It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType());
+			if(guiMode){
+				getCanvas().getFrame().createCardPanel();
+				getCanvas().getFrame().revalidate();
+				popupWithPlayerIcon("It is "+players.get(currentPlayer).getName()+"'s turn, as "+players.get(currentPlayer).getCharacter().getType());
+			}
 		}
 		
 	}
@@ -554,6 +556,11 @@ public class Board {
 			return canvas;
 		}
 		
+		public void addPlayer(Player p){
+			if (state == WAITING) {
+				players.add(p);
+			}
+		}
 		
 		
 		public BufferedImage attachImages(BufferedImage img1, BufferedImage img2)

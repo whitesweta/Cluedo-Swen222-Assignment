@@ -60,14 +60,14 @@ public class SelectCharFrame extends JFrame{
 					JOptionPane.showMessageDialog(null,"Please enter your name!");
 				}
 				else{
-					addPlayer(new Player(new Character(Character.CharaType.valueOf(chara)),name));
+					board.addPlayer(new Player(new Character(Character.CharaType.valueOf(chara)),name));
 					repaintCanvas();
 					removeFromOptions(chara);
 					nameEntry.setText("");
 					numPlayer--;
 					if(numPlayer == 0){
 						setVisible(false);
-						board.readyToStart();
+						board.readyToStart(true);
 						
 					}
 				}
@@ -116,10 +116,5 @@ public class SelectCharFrame extends JFrame{
 		numPlayer = num;
 	}
 	
-	public void addPlayer(Player p) {
-		if (board.getState() == Board.WAITING) {
-			board.getPlayers().add(p);
-		}
-	}
 
 }
