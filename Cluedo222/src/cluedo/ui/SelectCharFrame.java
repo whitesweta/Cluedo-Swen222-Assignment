@@ -24,7 +24,7 @@ import cluedo.other.Character;
  * players will chose how many players are playing and what characters they want
  * to be
  * 
- * @author Shweta
+ * @author Shweta Barapatre
  *
  */
 @SuppressWarnings("serial")
@@ -77,12 +77,14 @@ public class SelectCharFrame extends JFrame {
 				}
 				String chara = group.getSelection().getActionCommand();
 				String name = nameEntry.getText();
+
 				if (name.equals("")) {
 					JOptionPane.showMessageDialog(null,
 							"Please enter your name!");
 				} else {
 					addPlayer(new Player(new Character(Character.CharaType
 							.valueOf(chara)), name));
+
 					repaintCanvas();
 					removeFromOptions(chara);
 					nameEntry.setText("");
@@ -160,5 +162,6 @@ public class SelectCharFrame extends JFrame {
 			board.getPlayers().add(p);
 		}
 	}
+
 
 }

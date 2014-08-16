@@ -122,11 +122,13 @@ public class Board {
 	public void startGame() {
 		if (state == READY) {
 			state = PLAYING;
+
 			getCanvas().getFrame().createCardPanel();
 			getCanvas().getFrame().revalidate();
 			popupWithPlayerIcon("It is " + players.get(currentPlayer).getName()
 					+ "'s turn, as "
 					+ players.get(currentPlayer).getCharacter().getType());
+
 		}
 
 	}
@@ -290,10 +292,16 @@ public class Board {
 					"You cannot make a suggestion outside of a room");
 			return;
 		}
+
 		hasSuggested = true;
 		Room currentRoom = ((RoomTile) tiles[pos.getY()][pos.getX()]).getRoom();
+
 		Type currentRoomType = currentRoom.getType();
 		List<Type> items = popupOptions(false);
+		if (items == null) {
+			return;
+		} // user pressed cancel
+		hasSuggested = true;
 		Set<Type> chosenItems = new HashSet<Type>(items);
 		chosenItems.add(currentRoomType);
 		moveForSuggestion(items, currentRoom);
@@ -325,7 +333,11 @@ public class Board {
 			return;
 		}
 		Player p = players.get(currentPlayer);
-		Set<Type> chosenItems = new HashSet<Type>(popupOptions(true));
+		List<Type> items = popupOptions(true);
+		if (items == null) {
+			return;
+		}// user pressed cancel
+		Set<Type> chosenItems = new HashSet<Type>(items);
 		boolean lost = false;
 		for (Card c : solution) {
 			if (!(chosenItems.contains(c.cardType()))) {
@@ -358,6 +370,9 @@ public class Board {
 	 *            the current player
 	 * @return next player
 	 */
+
+	// assumes all the players have been created
+
 	private int nextPlayer(int currentPlayer) {
 		int next = currentPlayer + 1;
 		if (next == players.size()) {
@@ -570,6 +585,7 @@ public class Board {
 	 *            true if a player has selected the right solution, false if all
 	 *            players have been eliminated
 	 */
+
 	private void endGame(boolean gameWon) {
 		if (gameWon) {
 			String name = players.get(currentPlayer).getName();
@@ -595,6 +611,7 @@ public class Board {
 	 *            suggestion
 	 * @return
 	 */
+
 	private List<Type> popupOptions(boolean forAccusation) {
 		List<Type> chosenItems = new ArrayList<Type>();
 		String label = "Make Suggestion";
@@ -604,17 +621,26 @@ public class Board {
 			Type room = (Type) JOptionPane.showInputDialog(null, "Which room?",
 					label, JOptionPane.PLAIN_MESSAGE, null, roomOptions,
 					roomOptions[0]);
+			if (room == null) {
+				return null;
+			}// user pressed cancel
 			chosenItems.add(room);
 		}
 		Object[] weaponOptions = Weapon.WeaponType.values();
 		Type weapon = (Type) JOptionPane.showInputDialog(null, "Which weapon?",
 				label, JOptionPane.PLAIN_MESSAGE, null, weaponOptions,
 				weaponOptions[0]);
+		if (weapon == null) {
+			return null;
+		}// user pressed cancel
 		chosenItems.add(weapon);
 		Object[] characterOptions = Character.CharaType.values();
 		Type character = (Type) JOptionPane.showInputDialog(null,
 				"Which character?", label, JOptionPane.PLAIN_MESSAGE, null,
 				characterOptions, characterOptions[0]);
+		if (character == null) {
+			return null;
+		}// user pressed cancel
 		chosenItems.add(character);
 		return chosenItems;
 	}
