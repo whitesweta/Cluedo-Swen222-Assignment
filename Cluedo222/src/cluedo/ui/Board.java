@@ -169,7 +169,7 @@ public class Board {
 			}
 			RoomTile roomOrigin = (RoomTile) before;
 			SecretTile passage = (SecretTile) after;
-			if (roomOrigin.equals(passage.getOrigin())) {// player was in the
+			if (roomOrigin.getRoom().getType() == passage.getOrigin().getType()) {// player was in the
 															// room the secret
 															// passage is in
 				RoomTile destination = passage.getPassageTo()
@@ -178,7 +178,7 @@ public class Board {
 				moveToTile(before, destination, player);
 			} else {// player was not in room the secret passage is in
 				JOptionPane.showMessageDialog(canvas.getFrame(),
-						"Must be in the room before using secret passage");
+						"Must be in the same room as secret passage");
 			}
 		} else if (!hasRolledDice) {
 			JOptionPane.showMessageDialog(canvas.getFrame(),
