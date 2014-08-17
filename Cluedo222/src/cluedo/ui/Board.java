@@ -153,7 +153,7 @@ public class Board {
 			return;
 		}
 		if (hasMoved) {
-			JOptionPane.showMessageDialog(null, "You have already moved.");
+			JOptionPane.showMessageDialog(canvas.getFrame(), "You have already moved.");
 			return;
 		}
 		Player player = players.get(currentPlayer);
@@ -163,7 +163,7 @@ public class Board {
 
 		if (after instanceof SecretTile) {// player clicked on a secret tile
 			if (!(before instanceof RoomTile)) {
-				JOptionPane.showMessageDialog(null,
+				JOptionPane.showMessageDialog(canvas.getFrame(),
 						"Must be in the room before using secret passage");
 				return;
 			}
@@ -177,18 +177,18 @@ public class Board {
 												// passage leads to
 				moveToTile(before, destination, player);
 			} else {// player was not in room the secret passage is in
-				JOptionPane.showMessageDialog(null,
+				JOptionPane.showMessageDialog(canvas.getFrame(),
 						"Must be in the room before using secret passage");
 			}
 		} else if (!hasRolledDice) {
-			JOptionPane.showMessageDialog(null,
+			JOptionPane.showMessageDialog(canvas.getFrame(),
 					"Please roll dice first or click on a secret passage");
 		} else {
 			oldPos = before.posWhenMovedOut(newPos);
 			if (after.canMoveToTile(before, oldPos, toMove)) {
 				moveToTile(before, after, player);
 			} else {
-				JOptionPane.showMessageDialog(null, "Invalid move");
+				JOptionPane.showMessageDialog(canvas.getFrame(), "Invalid move");
 			}
 		}
 	}
@@ -244,13 +244,13 @@ public class Board {
 					(BufferedImage) two);
 
 			picLabel = new ImageIcon(combined);
-			JOptionPane.showMessageDialog(null, "You have rolled a "
+			JOptionPane.showMessageDialog(canvas.getFrame(), "You have rolled a "
 					+ firstDice + " and a " + secondDice, "Rolled Dice",
 					JOptionPane.PLAIN_MESSAGE, picLabel);
 		}
 
 		else if (hasRolledDice) {
-			JOptionPane.showMessageDialog(null, "You already rolled a "
+			JOptionPane.showMessageDialog(canvas.getFrame(), "You already rolled a "
 					+ firstDice + " and a " + secondDice,
 					"Already Rolled This Turn", JOptionPane.PLAIN_MESSAGE,
 					picLabel);
@@ -269,14 +269,14 @@ public class Board {
 			return;
 		}
 		if (hasSuggested) {
-			JOptionPane.showMessageDialog(null,
+			JOptionPane.showMessageDialog(canvas.getFrame(),
 					"You can only suggest once in a turn");
 			return;
 		}
 		Player p = players.get(currentPlayer);
 		Position pos = p.getPosition();
 		if (!(tiles[pos.getY()][pos.getX()] instanceof RoomTile)) {
-			JOptionPane.showMessageDialog(null,
+			JOptionPane.showMessageDialog(canvas.getFrame(),
 					"You cannot make a suggestion outside of a room");
 			return;
 		}
@@ -307,13 +307,13 @@ public class Board {
 			String filename = "unknown"+random+".jpg";
 			Image image = CluedoCanvas.loadImage(filename);
 			picLabel = new ImageIcon(image);
-			JOptionPane.showMessageDialog(null, message, "Suggestion",JOptionPane.PLAIN_MESSAGE, picLabel);
+			JOptionPane.showMessageDialog(canvas.getFrame(), message, "Suggestion",JOptionPane.PLAIN_MESSAGE, picLabel);
 		} else {
 			message = "A player has " + refutedItem + " in their cards";
 			String filename = refutedItem+".jpg";
 			Image image = CluedoCanvas.loadImage(filename);
 			picLabel = new ImageIcon(image);
-			JOptionPane.showMessageDialog(null, message, "Suggestion",JOptionPane.PLAIN_MESSAGE, picLabel);
+			JOptionPane.showMessageDialog(canvas.getFrame(), message, "Suggestion",JOptionPane.PLAIN_MESSAGE, picLabel);
 		}
 	}
 
@@ -346,7 +346,7 @@ public class Board {
 			for (Card c : solution) {
 				message += c.cardType() + " ";
 			}
-			JOptionPane.showMessageDialog(null, message);
+			JOptionPane.showMessageDialog(canvas.getFrame(), message);
 			if (++numEliminated == players.size()) {
 				endGame(false);
 			} else {
@@ -587,7 +587,7 @@ public class Board {
 			for (Card c : solution) {
 				message += c.cardType() + " ";
 			}
-			JOptionPane.showMessageDialog(null, message);
+			JOptionPane.showMessageDialog(canvas.getFrame(), message);
 		}
 		state = GAMEOVER;
 	}
@@ -608,7 +608,7 @@ public class Board {
 		if (forAccusation) {
 			label = "Make Accusation";
 			Object[] roomOptions = Room.RoomType.values();
-			Type room = (Type) JOptionPane.showInputDialog(null, "Which room?",
+			Type room = (Type) JOptionPane.showInputDialog(canvas.getFrame(), "Which room?",
 					label, JOptionPane.PLAIN_MESSAGE, null, roomOptions,
 					roomOptions[0]);
 			if (room == null) {
@@ -617,7 +617,7 @@ public class Board {
 			chosenItems.add(room);
 		}
 		Object[] weaponOptions = Weapon.WeaponType.values();
-		Type weapon = (Type) JOptionPane.showInputDialog(null, "Which weapon?",
+		Type weapon = (Type) JOptionPane.showInputDialog(canvas.getFrame(), "Which weapon?",
 				label, JOptionPane.PLAIN_MESSAGE, null, weaponOptions,
 				weaponOptions[0]);
 		if (weapon == null) {
@@ -625,7 +625,7 @@ public class Board {
 		}// user pressed cancel
 		chosenItems.add(weapon);
 		Object[] characterOptions = Character.CharaType.values();
-		Type character = (Type) JOptionPane.showInputDialog(null,
+		Type character = (Type) JOptionPane.showInputDialog(canvas.getFrame(),
 				"Which character?", label, JOptionPane.PLAIN_MESSAGE, null,
 				characterOptions, characterOptions[0]);
 		if (character == null) {
@@ -705,7 +705,7 @@ public class Board {
 				+ "oval.png";
 		Image image = CluedoCanvas.loadImage(filename);
 		picLabel = new ImageIcon(image);
-		JOptionPane.showMessageDialog(null, message, "Cluedo",
+		JOptionPane.showMessageDialog(canvas.getFrame(), message, "Cluedo",
 				JOptionPane.PLAIN_MESSAGE, picLabel);
 	}
 	

@@ -79,7 +79,7 @@ public class SelectCharFrame extends JFrame {
 				String name = nameEntry.getText();
 
 				if (name.equals("")) {
-					JOptionPane.showMessageDialog(null,
+					JOptionPane.showMessageDialog(SelectCharFrame.this,
 							"Please enter your name!");
 				} else {
 					addPlayer(new Player(new Character(Character.CharaType
@@ -137,7 +137,7 @@ public class SelectCharFrame extends JFrame {
 		Object[] options = { 3, 4, 5, 6 };
 		Integer num = null;
 		while (true) {
-			num = (Integer) JOptionPane.showInputDialog(null,
+			num = (Integer) JOptionPane.showInputDialog(this,
 					"How many players?", "Number of Players",
 					JOptionPane.PLAIN_MESSAGE, null, options, "3");
 			if (num != null) {
