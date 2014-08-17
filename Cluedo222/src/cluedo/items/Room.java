@@ -1,10 +1,11 @@
-package cluedo.other;
+package cluedo.items;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import cluedo.other.Position;
 import cluedo.tile.DoorTile;
 import cluedo.tile.RoomTile;
 

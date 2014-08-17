@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import cluedo.items.Character;
 import cluedo.other.Player;
-import cluedo.other.Character;
 
 /**
  * Represents the panel that pop up that sets up the game for the player the

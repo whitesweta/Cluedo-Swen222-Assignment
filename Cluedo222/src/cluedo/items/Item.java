@@ -1,4 +1,4 @@
-package cluedo.other;
+package cluedo.items;
 
 /**
  * Represents an Item in the Game.

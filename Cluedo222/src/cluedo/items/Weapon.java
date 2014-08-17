@@ -1,4 +1,6 @@
-package cluedo.other;
+package cluedo.items;
+
+import cluedo.other.Position;
 
 /**
  * Represent a weapon in the game, implements Type.

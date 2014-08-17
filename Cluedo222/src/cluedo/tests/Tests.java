@@ -5,14 +5,14 @@ import static org.junit.Assert.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import cluedo.items.Character;
+import cluedo.items.Room;
+import cluedo.items.Type;
+import cluedo.items.Weapon;
 import cluedo.other.Card;
 import cluedo.other.Player;
 import cluedo.other.Position;
-import cluedo.other.Room;
-import cluedo.other.Type;
-import cluedo.other.Weapon;
 import cluedo.tile.*;
-import cluedo.other.Character;
 
 import org.junit.*;
 

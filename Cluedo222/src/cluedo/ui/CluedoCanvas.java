@@ -7,14 +7,13 @@ import java.awt.Image;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import cluedo.items.Room;
+import cluedo.items.Weapon;
 import cluedo.other.Player;
 import cluedo.other.Position;
-import cluedo.other.Room;
-import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
 
 /**

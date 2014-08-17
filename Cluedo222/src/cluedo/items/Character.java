@@ -1,4 +1,4 @@
-package cluedo.other;
+package cluedo.items;
 
 /**
  * Represents a character in the game. Implements item

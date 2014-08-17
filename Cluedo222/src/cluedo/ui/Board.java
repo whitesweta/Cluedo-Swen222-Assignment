@@ -20,15 +20,15 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import cluedo.items.Character;
+import cluedo.items.Room;
+import cluedo.items.Type;
+import cluedo.items.Weapon;
+import cluedo.items.Character.CharaType;
+import cluedo.items.Room.RoomType;
 import cluedo.other.Card;
-import cluedo.other.Character;
-import cluedo.other.Character.CharaType;
 import cluedo.other.Player;
 import cluedo.other.Position;
-import cluedo.other.Room;
-import cluedo.other.Room.RoomType;
-import cluedo.other.Type;
-import cluedo.other.Weapon;
 import cluedo.tile.BoardTile;
 import cluedo.tile.DoorTile;
 import cluedo.tile.EmptyTile;
@@ -59,7 +59,7 @@ public class Board {
 							// from dice roll
 	private int numEliminated = 0; // number of players that have been
 									// eliminated
-	int state; // this is used to tell us what state we're in.
+	private int state; // this is used to tell us what state we're in.
 	private int currentPlayer = 0; // the index of which player's turn it is
 
 	private boolean hasRolledDice = false; // whether or not the current player
@@ -76,10 +76,9 @@ public class Board {
 
 	/**
 	 * Constructs a board from the file, creating the appropriate tiles as
-	 * specified in the 'board.txt' file Sets up the rooms and weapons that will
-	 * be on the board Creates the players and makes a random solution - who the
-	 * murderer was, the weapon and the room it was done in sets the state to
-	 * waiting
+	 * specified in the 'board.txt' file. Sets up the rooms and weapons that will
+	 * be on the board. Sets the state to waiting, indicating it is waiting for
+	 * all of the players to be added to the board first.
 	 * 
 	 * @param canvas
 	 *            the canvas that is used to call the board
@@ -103,16 +102,16 @@ public class Board {
 
 	// state changing methods
 	/**
-	 * //changes the state from waiting to ready. deals the cards to the players
+	 * changes the state from waiting to ready. deals the cards to the players
 	 * ensures that board is set up and players are created before attempting to
-	 * allocate cards to them starts the game going
+	 * allocate cards to them starts the game going.
 	 */
 	public void readyToStart() {
 		if (state == WAITING) {
 			state = READY;
 			dealCards();
+			startGame();
 		}
-		startGame();
 	}
 
 	/**
@@ -136,13 +135,14 @@ public class Board {
 	// IN GAME METHODS
 	/**
 	 * Moves the current player to where they have clicked on the screen, if it
-	 * is a valid move and the state of the game is playing A valid move are as
+	 * is a valid move and the state of the game is playing. A valid move are as
 	 * follows: -player has not moved in this turn and has not rolled the dice.
 	 * They are in a room with a secret passage. They click on that secret
 	 * passage tile to be transported to the room the passage connects to
 	 * -player has not moved in this turn and has rolled the dice. The tile they
 	 * want to go to is not an empty tile. They have rolled a sufficient amount
-	 * to get to that tile from their old tile If it was not a valid move, a pop
+	 * to get to that tile from their old tile.
+	 * If it was not a valid move, a pop
 	 * up window will inform the player that it is invalid
 	 * 
 	 * @param Position
@@ -198,10 +198,13 @@ public class Board {
 	 * indicating they want their turn to be over intialises all the booleans
 	 * back to false changes the current player to the next player so long as
 	 * they are not eliminated by making a wrong accusation, otherwise skips
-	 * them makes a new pop up indicating whos turn it is now
+	 * them makes a new pop up indicating whose turn it is now
 	 */
 	public void endTurn() {
+		if(state != PLAYING){return;}
 		toMove = 0;
+		firstDice = 0;
+		secondDice = 0;
 		hasRolledDice = false;
 		hasMoved = false;
 		hasSuggested = false;
@@ -221,24 +224,9 @@ public class Board {
 	}
 
 	/**
-	 * method that creates the pop up with a given message
-	 * 
-	 * @param message
-	 *            the message that will be in the pop up
-	 */
-	private void popupWithPlayerIcon(String message) {
-		String filename = players.get(currentPlayer).getCharacter().getType()
-				+ "oval.png";
-		Image image = CluedoCanvas.loadImage(filename);
-		picLabel = new ImageIcon(image);
-		JOptionPane.showMessageDialog(null, message, "Cluedo",
-				JOptionPane.PLAIN_MESSAGE, picLabel);
-	}
-
-	/**
 	 * This method is executed when the player has clicked roll the dice button
 	 * picks two random numbers from 1-6 and displays what they have rolled in a
-	 * pop up if they have already pressed teh roll button before in their turn,
+	 * pop up. If they have already pressed the roll button before in their turn,
 	 * the pop up displays the same values they rolled the first time
 	 */
 	public void diceRolled() {
@@ -271,13 +259,13 @@ public class Board {
 	}
 
 	/**
-	 * This method executes if the player wants to make a suggestion does
-	 * nothing if state of game is game over checks suggested types and displays
+	 * This method executes if the player wants to make a suggestion. Does
+	 * nothing if state of game is game over. Checks suggested types and displays
 	 * the card if it is it amongst the other players hand tells the player if
 	 * it does not find a card of one of the things they suggested
 	 */
 	public void makeSuggestion() {
-		if (state == GAMEOVER) {
+		if (state != PLAYING) {
 			return;
 		}
 		if (hasSuggested) {
@@ -295,18 +283,17 @@ public class Board {
 
 		hasSuggested = true;
 		Room currentRoom = ((RoomTile) tiles[pos.getY()][pos.getX()]).getRoom();
-
 		Type currentRoomType = currentRoom.getType();
-		List<Type> items = popupOptions(false);
-		if (items == null) {
+		List<Type> items = popupOptions(false); //get user suggestions
+		if (items == null) {// user pressed cancel
 			return;
-		} // user pressed cancel
+		} 
 		hasSuggested = true;
 		Set<Type> chosenItems = new HashSet<Type>(items);
 		chosenItems.add(currentRoomType);
-		moveForSuggestion(items, currentRoom);
+		moveForSuggestion(items, currentRoom);//move suggested items to current room
 		Type refutedItem = null;
-		for (int i = 0; i < players.size() - 1; i++) {
+		for (int i = 0; i < players.size() - 1; i++) {//finding a card in other player's decks that matches one of the suggested items
 			Player nextPlayer = players.get(nextPlayer(currentPlayer));
 			refutedItem = nextPlayer.refuteSuggestion(chosenItems);
 			if (refutedItem != null) {
@@ -342,13 +329,13 @@ public class Board {
 		}
 		Player p = players.get(currentPlayer);
 		List<Type> items = popupOptions(true);
-		if (items == null) {
+		if (items == null) {// user pressed cancel
 			return;
-		}// user pressed cancel
+		}
 		Set<Type> chosenItems = new HashSet<Type>(items);
 		boolean lost = false;
 		for (Card c : solution) {
-			if (!(chosenItems.contains(c.cardType()))) {
+			if (!(chosenItems.contains(c.cardType()))) {//one of the items they have selected is not in the solution
 				lost = true;
 				p.setEliminated(true);
 				break;
@@ -373,14 +360,12 @@ public class Board {
 
 	/**
 	 * changes the current player to the next player
+	 * Assumes all players have been added
 	 * 
 	 * @param currentPlayer
 	 *            the current player
 	 * @return next player
 	 */
-
-	// assumes all the players have been created
-
 	private int nextPlayer(int currentPlayer) {
 		int next = currentPlayer + 1;
 		if (next == players.size()) {
@@ -404,9 +389,6 @@ public class Board {
 		String line;
 		while ((line = br.readLine()) != null) {
 			lines.add(line);
-
-			// now sanity check
-
 			if (width == -1) {
 				width = line.length();
 			} else if (width != line.length()) {
@@ -415,7 +397,7 @@ public class Board {
 						+ " incorrect width.");
 			}
 		}
-
+		br.close();
 		for (int y = 0; y < lines.size(); y++) {
 			line = lines.get(y);
 			for (int x = 0; x < line.length(); x++) {
@@ -710,6 +692,36 @@ public class Board {
 		}
 
 	}
+	
+	/**
+	 * method that creates the pop up with a given message, with the current
+	 * player's picture
+	 * 
+	 * @param message
+	 *            the message that will be in the pop up
+	 */
+	private void popupWithPlayerIcon(String message) {
+		String filename = players.get(currentPlayer).getCharacter().getType()
+				+ "oval.png";
+		Image image = CluedoCanvas.loadImage(filename);
+		picLabel = new ImageIcon(image);
+		JOptionPane.showMessageDialog(null, message, "Cluedo",
+				JOptionPane.PLAIN_MESSAGE, picLabel);
+	}
+	
+	/**Merges two images together and returns the resulting image
+	 * @param img1
+	 * @param img2
+	 * @return
+	 * */
+	private BufferedImage attachImages(BufferedImage img1, BufferedImage img2) {
+		BufferedImage resultImage = new BufferedImage(img1.getWidth() + img2.getWidth(),img1.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics g = resultImage.getGraphics();
+		g.drawImage(img1, 0, 0, null);
+		g.drawImage(img2, img1.getWidth(), 0, null);
+		return resultImage;
+
+	}
 
 	// GETTERS AND SETTERS
 
@@ -744,13 +756,6 @@ public class Board {
 		return canvas;
 	}
 
-	public BufferedImage attachImages(BufferedImage img1, BufferedImage img2) {
-		BufferedImage resultImage = new BufferedImage(img1.getWidth() + img2.getWidth(),img1.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics g = resultImage.getGraphics();
-		g.drawImage(img1, 0, 0, null);
-		g.drawImage(img2, img1.getWidth(), 0, null);
-		return resultImage;
-
-	}
+	
 
 }
