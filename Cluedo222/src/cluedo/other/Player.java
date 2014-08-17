@@ -3,6 +3,9 @@ package cluedo.other;
 import java.util.ArrayList;
 import java.util.Set;
 
+import cluedo.items.Character;
+import cluedo.items.Type;
+
 /**
  * Represents a Player in the Game. The users can choose how many players they
  * want to create for the current game.

@@ -2,9 +2,9 @@ package cluedo.tile;
 
 import java.awt.Color;
 
+import cluedo.items.Room;
 import cluedo.other.Player;
 import cluedo.other.Position;
-import cluedo.other.Room;
 
 /**
  * Represents a RoomTile on the board at a given position on the Canvas. If a
@@ -96,12 +96,12 @@ public class RoomTile extends BoardTile {
 		if (isOccupied()) {
 			return false;
 		}
-		if (oldTile instanceof RoomTile) {
+		if (oldTile instanceof RoomTile) {//cannot move to another room tile with the same room
 			if (((RoomTile) oldTile).room.equals(this.room)) {
 				return false;
 			}
 		}
-		for (DoorTile d : room.getDoortiles()) {
+		for (DoorTile d : room.getDoortiles()) {//player has rolled sufficient amount to get to one of the door tiles
 			int differenceX = Math.abs(oldPos.getX() - d.getPosition().getX());
 			int differenceY = Math.abs(oldPos.getY() - d.getPosition().getY());
 			if (differenceX + differenceY <= rolledAmt) {

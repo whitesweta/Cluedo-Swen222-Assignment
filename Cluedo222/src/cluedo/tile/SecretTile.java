@@ -2,9 +2,9 @@ package cluedo.tile;
 
 import java.awt.Color;
 
+import cluedo.items.Room;
 import cluedo.other.Player;
 import cluedo.other.Position;
-import cluedo.other.Room;
 
 /**
  * Represent a SecretTile, which is a tile that connects to another secret tile

@@ -2,6 +2,9 @@ package cluedo.other;
 
 import java.awt.Image;
 
+import cluedo.items.Item;
+import cluedo.items.Type;
+
 /**
  * Represents a card that a player can have in the game
  * 
@@ -50,7 +53,7 @@ public class Card {
 	 */
 	@Override
 	public String toString() {
-		return /* "Card [cardImage=" + cardImage + ", item=" + */item
+		return  "Card [cardImage=" + cardImage + ", item=" + item
 				.getType() + "]";
 	}
 }

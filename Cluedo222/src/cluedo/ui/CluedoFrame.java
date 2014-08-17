@@ -86,7 +86,7 @@ public class CluedoFrame extends JFrame implements WindowListener,
 	 */
 	public void newGame() {
 		this.dispose();
-		CluedoFrame frame = new CluedoFrame();
+		new CluedoFrame();
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class CluedoFrame extends JFrame implements WindowListener,
 		cardViewer.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		if (board.state == board.PLAYING) {
+		if (board.getState() == Board.PLAYING) {
 			Player current = board.getCurrentPlayer();
 			ArrayList<Card> playersCards = current.getCards();
 			for (int i = 0; i < playersCards.size(); i++) {
