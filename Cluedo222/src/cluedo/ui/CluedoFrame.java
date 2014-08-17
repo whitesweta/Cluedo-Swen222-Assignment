@@ -29,7 +29,7 @@ import cluedo.other.Position;
 import cluedo.tile.BoardTile;
 
 /**
- * Represent the frame that holds the canvas and the board All the panels and
+ * Represent the frame that holds the canvas and the board all the panels and
  * buttons are created here
  * 
  * @author Shweta Barapatre and Maria Libunao
@@ -129,7 +129,6 @@ public class CluedoFrame extends JFrame implements WindowListener,
 			Player current = board.getCurrentPlayer();
 			ArrayList<Card> playersCards = current.getCards();
 			for (int i = 0; i < playersCards.size(); i++) {
-				System.out.println("drawing cards");
 				JLabel picLabel = new JLabel(new ImageIcon(playersCards.get(i)
 						.getImage()));
 				if (i <= 2) {
@@ -137,7 +136,6 @@ public class CluedoFrame extends JFrame implements WindowListener,
 					c.gridy = 0;
 					cardViewer.add(picLabel, c);
 				} else {
-					System.out.println(i);
 					c.gridx = i - 3;
 					c.gridy = 1;
 					cardViewer.add(picLabel, c);
@@ -207,7 +205,6 @@ public class CluedoFrame extends JFrame implements WindowListener,
 				int size = canvas.getSizeOfTile();
 				int posx = pos.getX() * size;
 				int posy = pos.getY() * size;
-				// System.out.println(pos.getX()+"x"+pos.getY()+"y");
 				if (e.getX() >= posx && e.getX() <= posx + size
 						&& e.getY() >= posy && e.getY() <= posy + size) {
 

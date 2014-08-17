@@ -169,9 +169,10 @@ public class Board {
 			}
 			RoomTile roomOrigin = (RoomTile) before;
 			SecretTile passage = (SecretTile) after;
+			System.out.println(roomOrigin.toString());
+			System.out.println(passage.getOrigin());
 			if (roomOrigin.equals(passage.getOrigin())) {// player was in the
-															// room the secret
-															// passage is in
+											// passage is in
 				RoomTile destination = passage.getPassageTo()
 						.getUnoccupiedTile(); // get some tile in the room the
 												// passage leads to
