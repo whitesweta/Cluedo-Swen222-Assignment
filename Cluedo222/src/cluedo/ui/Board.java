@@ -76,9 +76,9 @@ public class Board {
 
 	/**
 	 * Constructs a board from the file, creating the appropriate tiles as
-	 * specified in the 'board.txt' file. Sets up the rooms and weapons that will
-	 * be on the board. Sets the state to waiting, indicating it is waiting for
-	 * all of the players to be added to the board first.
+	 * specified in the 'board.txt' file. Sets up the rooms and weapons that
+	 * will be on the board. Sets the state to waiting, indicating it is waiting
+	 * for all of the players to be added to the board first.
 	 * 
 	 * @param canvas
 	 *            the canvas that is used to call the board
@@ -141,9 +141,8 @@ public class Board {
 	 * passage tile to be transported to the room the passage connects to
 	 * -player has not moved in this turn and has rolled the dice. The tile they
 	 * want to go to is not an empty tile. They have rolled a sufficient amount
-	 * to get to that tile from their old tile.
-	 * If it was not a valid move, a pop
-	 * up window will inform the player that it is invalid
+	 * to get to that tile from their old tile. If it was not a valid move, a
+	 * pop up window will inform the player that it is invalid
 	 * 
 	 * @param Position
 	 *            newPos the new position of the player
@@ -153,7 +152,8 @@ public class Board {
 			return;
 		}
 		if (hasMoved) {
-			JOptionPane.showMessageDialog(canvas.getFrame(), "You have already moved.");
+			JOptionPane.showMessageDialog(canvas.getFrame(),
+					"You have already moved.");
 			return;
 		}
 		Player player = players.get(currentPlayer);
@@ -170,9 +170,12 @@ public class Board {
 			RoomTile roomOrigin = (RoomTile) before;
 			SecretTile passage = (SecretTile) after;
 
-			if (roomOrigin.getRoom().getType() == passage.getOrigin().getType()) {// player was in the
-															// room the secret
-															// passage is in
+			if (roomOrigin.getRoom().getType() == passage.getOrigin().getType()) {// player
+																					// was
+																					// in
+																					// the
+				// room the secret
+				// passage is in
 
 				RoomTile destination = passage.getPassageTo()
 						.getUnoccupiedTile(); // get some tile in the room the
@@ -190,7 +193,8 @@ public class Board {
 			if (after.canMoveToTile(before, oldPos, toMove)) {
 				moveToTile(before, after, player);
 			} else {
-				JOptionPane.showMessageDialog(canvas.getFrame(), "Invalid move");
+				JOptionPane
+						.showMessageDialog(canvas.getFrame(), "Invalid move");
 			}
 		}
 	}
@@ -203,7 +207,9 @@ public class Board {
 	 * them makes a new pop up indicating whose turn it is now
 	 */
 	public void endTurn() {
-		if(state != PLAYING){return;}
+		if (state != PLAYING) {
+			return;
+		}
 		toMove = 0;
 		firstDice = 0;
 		secondDice = 0;
@@ -220,7 +226,7 @@ public class Board {
 						+ players.get(currentPlayer).getCharacter().getType());
 				canvas.repaint();
 				return;
-			
+
 			}
 			next = nextPlayer(next);
 		}
@@ -229,8 +235,8 @@ public class Board {
 	/**
 	 * This method is executed when the player has clicked roll the dice button
 	 * picks two random numbers from 1-6 and displays what they have rolled in a
-	 * pop up. If they have already pressed the roll button before in their turn,
-	 * the pop up displays the same values they rolled the first time
+	 * pop up. If they have already pressed the roll button before in their
+	 * turn, the pop up displays the same values they rolled the first time
 	 */
 	public void diceRolled() {
 		if (state == GAMEOVER) {
@@ -247,25 +253,25 @@ public class Board {
 					(BufferedImage) two);
 
 			picLabel = new ImageIcon(combined);
-			JOptionPane.showMessageDialog(canvas.getFrame(), "You have rolled a "
-					+ firstDice + " and a " + secondDice, "Rolled Dice",
-					JOptionPane.PLAIN_MESSAGE, picLabel);
+			JOptionPane.showMessageDialog(canvas.getFrame(),
+					"You have rolled a " + firstDice + " and a " + secondDice,
+					"Rolled Dice", JOptionPane.PLAIN_MESSAGE, picLabel);
 		}
 
 		else if (hasRolledDice) {
-			JOptionPane.showMessageDialog(canvas.getFrame(), "You already rolled a "
-					+ firstDice + " and a " + secondDice,
-					"Already Rolled This Turn", JOptionPane.PLAIN_MESSAGE,
-					picLabel);
+			JOptionPane.showMessageDialog(canvas.getFrame(),
+					"You already rolled a " + firstDice + " and a "
+							+ secondDice, "Already Rolled This Turn",
+					JOptionPane.PLAIN_MESSAGE, picLabel);
 		}
 
 	}
 
 	/**
 	 * This method executes if the player wants to make a suggestion. Does
-	 * nothing if state of game is game over. Checks suggested types and displays
-	 * the card if it is it amongst the other players hand tells the player if
-	 * it does not find a card of one of the things they suggested
+	 * nothing if state of game is game over. Checks suggested types and
+	 * displays the card if it is it amongst the other players hand tells the
+	 * player if it does not find a card of one of the things they suggested
 	 */
 	public void makeSuggestion() {
 		if (state != PLAYING) {
@@ -287,16 +293,20 @@ public class Board {
 		hasSuggested = true;
 		Room currentRoom = ((RoomTile) tiles[pos.getY()][pos.getX()]).getRoom();
 		Type currentRoomType = currentRoom.getType();
-		List<Type> items = popupOptions(false); //get user suggestions
+		List<Type> items = popupOptions(false); // get user suggestions
 		if (items == null) {// user pressed cancel
 			return;
-		} 
+		}
 		hasSuggested = true;
 		Set<Type> chosenItems = new HashSet<Type>(items);
 		chosenItems.add(currentRoomType);
-		moveForSuggestion(items, currentRoom);//move suggested items to current room
+		moveForSuggestion(items, currentRoom);// move suggested items to current
+												// room
 		Type refutedItem = null;
-		for (int i = 0; i < players.size() - 1; i++) {//finding a card in other player's decks that matches one of the suggested items
+		for (int i = 0; i < players.size() - 1; i++) {// finding a card in other
+														// player's decks that
+														// matches one of the
+														// suggested items
 			Player nextPlayer = players.get(nextPlayer(currentPlayer));
 			refutedItem = nextPlayer.refuteSuggestion(chosenItems);
 			if (refutedItem != null) {
@@ -307,16 +317,18 @@ public class Board {
 		if (refutedItem == null) {
 			message = "The other players cannot refute your suggestion";
 			int random = (int) (Math.random() * 1 + 1);
-			String filename = "unknown"+random+".jpg";
+			String filename = "unknown" + random + ".jpg";
 			Image image = CluedoCanvas.loadImage(filename);
 			picLabel = new ImageIcon(image);
-			JOptionPane.showMessageDialog(canvas.getFrame(), message, "Suggestion",JOptionPane.PLAIN_MESSAGE, picLabel);
+			JOptionPane.showMessageDialog(canvas.getFrame(), message,
+					"Suggestion", JOptionPane.PLAIN_MESSAGE, picLabel);
 		} else {
 			message = "A player has " + refutedItem + " in their cards";
-			String filename = refutedItem+".jpg";
+			String filename = refutedItem + ".jpg";
 			Image image = CluedoCanvas.loadImage(filename);
 			picLabel = new ImageIcon(image);
-			JOptionPane.showMessageDialog(canvas.getFrame(), message, "Suggestion",JOptionPane.PLAIN_MESSAGE, picLabel);
+			JOptionPane.showMessageDialog(canvas.getFrame(), message,
+					"Suggestion", JOptionPane.PLAIN_MESSAGE, picLabel);
 		}
 	}
 
@@ -338,7 +350,9 @@ public class Board {
 		Set<Type> chosenItems = new HashSet<Type>(items);
 		boolean lost = false;
 		for (Card c : solution) {
-			if (!(chosenItems.contains(c.cardType()))) {//one of the items they have selected is not in the solution
+			if (!(chosenItems.contains(c.cardType()))) {// one of the items they
+														// have selected is not
+														// in the solution
 				lost = true;
 				p.setEliminated(true);
 				break;
@@ -362,8 +376,8 @@ public class Board {
 	}
 
 	/**
-	 * changes the current player to the next player
-	 * Assumes all players have been added
+	 * changes the current player to the next player Assumes all players have
+	 * been added
 	 * 
 	 * @param currentPlayer
 	 *            the current player
@@ -611,18 +625,18 @@ public class Board {
 		if (forAccusation) {
 			label = "Make Accusation";
 			Object[] roomOptions = Room.RoomType.values();
-			Type room = (Type) JOptionPane.showInputDialog(canvas.getFrame(), "Which room?",
-					label, JOptionPane.PLAIN_MESSAGE, null, roomOptions,
-					roomOptions[0]);
+			Type room = (Type) JOptionPane.showInputDialog(canvas.getFrame(),
+					"Which room?", label, JOptionPane.PLAIN_MESSAGE, null,
+					roomOptions, roomOptions[0]);
 			if (room == null) {
 				return null;
 			}// user pressed cancel
 			chosenItems.add(room);
 		}
 		Object[] weaponOptions = Weapon.WeaponType.values();
-		Type weapon = (Type) JOptionPane.showInputDialog(canvas.getFrame(), "Which weapon?",
-				label, JOptionPane.PLAIN_MESSAGE, null, weaponOptions,
-				weaponOptions[0]);
+		Type weapon = (Type) JOptionPane.showInputDialog(canvas.getFrame(),
+				"Which weapon?", label, JOptionPane.PLAIN_MESSAGE, null,
+				weaponOptions, weaponOptions[0]);
 		if (weapon == null) {
 			return null;
 		}// user pressed cancel
@@ -695,7 +709,7 @@ public class Board {
 		}
 
 	}
-	
+
 	/**
 	 * method that creates the pop up with a given message, with the current
 	 * player's picture
@@ -711,14 +725,17 @@ public class Board {
 		JOptionPane.showMessageDialog(canvas.getFrame(), message, "Cluedo",
 				JOptionPane.PLAIN_MESSAGE, picLabel);
 	}
-	
-	/**Merges two images together and returns the resulting image
+
+	/**
+	 * Merges two images together and returns the resulting image
+	 * 
 	 * @param img1
 	 * @param img2
 	 * @return
 	 * */
 	private BufferedImage attachImages(BufferedImage img1, BufferedImage img2) {
-		BufferedImage resultImage = new BufferedImage(img1.getWidth() + img2.getWidth(),img1.getHeight(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage resultImage = new BufferedImage(img1.getWidth()
+				+ img2.getWidth(), img1.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics g = resultImage.getGraphics();
 		g.drawImage(img1, 0, 0, null);
 		g.drawImage(img2, img1.getWidth(), 0, null);
@@ -758,7 +775,5 @@ public class Board {
 	public CluedoCanvas getCanvas() {
 		return canvas;
 	}
-
-	
 
 }

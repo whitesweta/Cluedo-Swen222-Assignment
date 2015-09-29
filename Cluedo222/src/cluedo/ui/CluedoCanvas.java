@@ -58,8 +58,8 @@ public class CluedoCanvas extends Canvas implements ImageObserver {
 
 	/**
 	 * draws the tiles, the weapons and the players on the canvas at their given
-	 * position tiles are drawn as squares, the szie indicated by teh size of
-	 * tile feild players are one tile large and weapons four tiles
+	 * position tiles are drawn as squares, the size indicated by the size of
+	 * tile field players are one tile large and weapons four tiles
 	 */
 	public void paint(Graphics g) {
 		for (int i = 0; i < board.getTiles().length; i++) {

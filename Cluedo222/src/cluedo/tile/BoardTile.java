@@ -73,6 +73,5 @@ public abstract class BoardTile {
 	 * @param rolledAmt
 	 * @return true if able to move to position
 	 */
-	public abstract boolean canMoveToTile(BoardTile oldTile, Position oldPos,
-			int rolledAmt);
+	public abstract boolean canMoveToTile(BoardTile oldTile, Position oldPos,int rolledAmt);
 }

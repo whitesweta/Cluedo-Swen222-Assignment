@@ -36,8 +36,7 @@ import cluedo.tile.BoardTile;
  *
  */
 @SuppressWarnings("serial")
-public class CluedoFrame extends JFrame implements WindowListener,
-		MouseListener, ActionListener {
+public class CluedoFrame extends JFrame implements WindowListener,MouseListener, ActionListener {
 	private CluedoCanvas canvas;
 	private JMenuBar menuBar;
 	private JMenu menu;
